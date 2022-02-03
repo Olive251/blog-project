@@ -1,19 +1,19 @@
 const xps = require("express");
 const res = require("express/lib/response");
+const path = require("path");
 
 const app = xps();
 
-app.use(xps.static("views"));
-
-
+app.use(xps.static("./views/"));
 
 const port = 8080;
 
+
 app.get('/', (req,res) => {
-    res.render('about');
+    res.sendFile(path.join(__dirname, 'views', 'about.html'));
 })
 app.get('/about', (req,res) => {
-    res.render('about');
+    res.sendFile(path.join(__dirname, 'views', 'about.html'));
 })
 
 app.listen(port, () => {

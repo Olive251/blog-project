@@ -12,18 +12,16 @@ let categories = [];
 
 
 /*
--read the json files and place them into the proper array
--first read and assign the posts file contents to the posts array
--once that succeeds, read and assign cat file contents to its array
--must be async to read the file
+-reads json files and puts them into arrays
+-added the awaits because categories array was loading as empty first time categories is loaded
 */
-let initialize = (pFile, cFile) => 
+let initialize = async (pFile, cFile) => 
 {
-    fs.promises
+    await fs.promises
         .readFile(pFile, 'utf8')
-        .then((data) => {
+        .then( async (data) => {
             posts = JSON.parse(data);
-            fs.promises
+            await fs.promises 
                 .readFile(cFile, 'utf8')
                 .then((data) => {
                     categories = JSON.parse(data);
@@ -34,8 +32,14 @@ let initialize = (pFile, cFile) =>
         })
         .catch((err) => {
             console.log(`ERROR: ${err}`);
+    })
+}
 
-        })
+let getCategories = () =>
+{
+    if (length.categories === 0)
+    {return "No results returned"}
+    return categories; 
 }
 
 //read all the posts in posts array
@@ -48,23 +52,19 @@ let getPosts = () =>
 //export function getPublishedPosts()
 let getPublishedPosts = () =>
 {
-    let published = posts.map((post) => {
-        if (post.published == true)
-        {
-            return post;
-        }
-    })
+    let published = [];
 
+    for (i=0;i<posts.length;i++)
+    {
+        if (posts[i].published === true)
+        {
+            published.push(posts[i]);
+        }
+    }
     return published;
 }
 
-//read categories json and put all into categories array
-//export function getCategories()
-//TODO add error handling if categories array is empty
-let getCategories = () =>
-{
-    return categories; 
-}
+
 
 exports.initialize = initialize;
 exports.getPosts = getPosts;

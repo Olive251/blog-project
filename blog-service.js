@@ -21,16 +21,18 @@ let initialize = (pFile, cFile) =>
 {
     let pFileRead = false;
     fs.readFile(pFile,'utf8', (err,data) => {
-        if(err) throw err;
-        posts = (json.Parse(data));
-        pFileRead = true;
+        if(err) {console.log(`ERROR: ${err}`);}
+        else {
+            posts = (json.Parse(data));
+            pFileRead = true;
+        }        
     })
 
     if (pFileRead == true)
     {
         fs.readFile(cFile,'utf8', (err,data) => {
-            if(err) throw err;
-            posts = (json.Parse(data));
+            if(err) {console.log(`ERROR: ${err}`);}
+            else {posts = (json.Parse(data));}
         })
     }
 }
@@ -57,6 +59,7 @@ let getPublishedPosts = () =>
 
 //read categories json and put all into categories array
 //export function getCategories()
+//TODO add error handling if categories array is empty
 let getCategories = () =>
 {
     return categories; 

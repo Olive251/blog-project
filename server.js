@@ -1,3 +1,16 @@
+/********************************************************************** 
+*  WEB322 – Assignment 2
+*  I declare that this assignment is my own work in accordance with Seneca  Academic Policy.   
+*  No part of this assignment has been copied manually or electronically from any other source 
+*  (including web sites) or distributed to other students. 
+*  
+*  Name: Olivia Brown Student ID: 112582192 Date: Feb, 4 2022 
+* 
+*  Online (Heroku) URL: ______________________________ 
+ 
+********************************************************************************/  
+
+
 const xps = require("express");
 const res = require("express/lib/response");
 const path = require("path");
@@ -21,20 +34,17 @@ app.get('/about', (req,res) => {
 })
 
 //update to send JSON formatted string containing all posts in posts.json with published==true
-app.get('/blog', async (req,res) => {
-    await bSvc.initialize(pFile, cFile);
+app.get('/blog', (req,res) => {
     res.send(bSvc.getPublishedPosts());
 })
 
 //json string all posts in posts.json
-app.get('/posts', async (req,res) => {
-    await bSvc.initialize(pFile, cFile);
+app.get('/posts', (req,res) => {
     res.send(bSvc.getPosts());
 })
 
 //json string categories in categories.json
-app.get('/categories',  async (req,res) => {
-    await bSvc.initialize(pFile, cFile);
+app.get('/categories',  (req,res) => {
     res.send(bSvc.getCategories());
 })
 
@@ -46,3 +56,4 @@ app.use((req,res) => {
 app.listen(port, () => {
     console.log(`App is listening at http://localhost:${port}`);
 })
+

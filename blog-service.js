@@ -19,22 +19,23 @@ let categories = [];
 */
 let initialize = (pFile, cFile) => 
 {
-    let pFileRead = false;
-    fs.readFile(pFile,'utf8', (err,data) => {
-        if(err) {console.log(`ERROR: ${err}`);}
-        else {
-            posts = (json.Parse(data));
-            pFileRead = true;
-        }        
-    })
-
-    if (pFileRead == true)
-    {
-        fs.readFile(cFile,'utf8', (err,data) => {
-            if(err) {console.log(`ERROR: ${err}`);}
-            else {posts = (json.Parse(data));}
+    fs.promises
+        .readFile(pFile, 'utf8')
+        .then((data) => {
+            posts = JSON.parse(data);
+            fs.promises
+                .readFile(cFile, 'utf8')
+                .then((data) => {
+                    categories = JSON.parse(data);
+                })
+                .catch((err) => {
+                    console.log(`ERROR: ${err}`);
+                })
         })
-    }
+        .catch((err) => {
+            console.log(`ERROR: ${err}`);
+
+        })
 }
 
 //read all the posts in posts array

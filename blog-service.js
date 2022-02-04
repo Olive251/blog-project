@@ -17,7 +17,7 @@ let categories = [];
 -once that succeeds, read and assign cat file contents to its array
 -must be async to read the file
 */
-export function initialize(pFile, cFile) 
+let initialize = (pFile, cFile) => 
 {
     let pFileRead = false;
     fs.readFile(pFile,'utf8', (err,data) => {
@@ -36,13 +36,14 @@ export function initialize(pFile, cFile)
 }
 
 //read all the posts in posts array
-export function getAllPosts()
+let getPosts = () =>
 {
     return posts;
 }
 
 //read posts in posts array, taking only the published one
-export function getPublishedPosts()
+//export function getPublishedPosts()
+let getPublishedPosts = () =>
 {
     let published = posts.map((post) => {
         if (post.published == true)
@@ -55,7 +56,13 @@ export function getPublishedPosts()
 }
 
 //read categories json and put all into categories array
-export function getCategories()
+//export function getCategories()
+let getCategories = () =>
 {
     return categories; 
 }
+
+exports.initialize = initialize;
+exports.getPosts = getPosts;
+exports.getPublishedPosts = getPublishedPosts;
+exports.getCategories = getCategories;

@@ -9,6 +9,9 @@ app.use(xps.static("./views/"));
 
 const port = 8080;
 
+const cFile = (path.join(__dirname, "data", "categories.json"));
+const pFile = (path.join(__dirname, "data", "posts.json"));
+
 
 app.get('/', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'about.html'));
@@ -29,12 +32,14 @@ app.get('./posts', (req,res) => {
 
 //json string categories in categories.json
 app.get('./categories', (req,res) => {
-    res.json(path.join(__dirname, 'data', 'categories.json'));
+    //res.json(path.join(__dirname, 'data', 'categories.json'));
+    bSvc.initialize(pFile, cFile);
+    res.send(getCategories());
 })
 
 //add 404 error handler
 app.use((req,res) => {
-    res.status(404).send('ERRO: 404! Page not found.');
+    res.status(404).send('ERROR: 404! Page not found.');
 })
 
 app.listen(port, () => {

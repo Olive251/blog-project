@@ -29,10 +29,13 @@ app.get('./posts', (req,res) => {
 
 //json string categories in categories.json
 app.get('./categories', (req,res) => {
-    res.sendFile(path.join(__dirname, 'views', 'categories.html'));
+    res.json(path.join(__dirname, 'data', 'categories.json'));
 })
 
 //add 404 error handler
+app.use((req,res) => {
+    res.status(404).send('ERRO: 404! Page not found.');
+})
 
 app.listen(port, () => {
     console.log(`App is listening at http://localhost:${port}`);

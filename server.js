@@ -21,20 +21,20 @@ app.get('/about', (req,res) => {
 })
 
 //update to send JSON formatted string containing all posts in posts.json with published==true
-app.get('./blog', (req,res) => {
+app.get('/blog', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'blog.html'));
 })
 
 //json string all posts in posts.json
-app.get('./posts', (req,res) => {
+app.get('/posts', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'posts.html'));
 })
 
 //json string categories in categories.json
-app.get('./categories', (req,res) => {
-    //res.json(path.join(__dirname, 'data', 'categories.json'));
+app.get('/categories', (req,res) => {
     bSvc.initialize(pFile, cFile);
-    res.send(getCategories());
+    res.send(bSvc.getCategories());
+
 })
 
 //add 404 error handler

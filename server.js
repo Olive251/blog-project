@@ -1,3 +1,19 @@
+/*****************************************************************************
+****
+* WEB322 – Assignment 02
+* I declare that this assignment is my own work in accordance with Seneca Academic Policy. 
+No part * of this assignment has been copied manually or electronically from any other source 
+* (including 3rd party web sites) or distributed to other students.
+* 
+* Name: Olivia Brown Student ID: 112582192 Date: Feb 4, 2022
+*
+* Online (Heroku) URL: https://agile-bastion-97856.herokuapp.com/
+*
+* GitHub Repository URL: https://github.com/Olive251/web322-app
+*
+******************************************************************************
+**/
+
 const xps = require("express");
 const res = require("express/lib/response");
 const path = require("path");
@@ -8,7 +24,8 @@ const app = xps();
 app.use(xps.static("./views/"));
 
 //const port = 8080;
-port = process.env.PORT;
+port = process.env.PORT; //changed to prevent error with Heroku
+
 const cFile = (path.join(__dirname, "data", "categories.json"));
 const pFile = (path.join(__dirname, "data", "posts.json"));
 

@@ -7,9 +7,9 @@ No part * of this assignment has been copied manually or electronically from any
 * 
 * Name: Olivia Brown Student ID: 112582192 Date: Feb 4, 2022
 *
-* Online (Heroku) URL: ________________________________________________________
+* Online (Heroku) URL: https://agile-bastion-97856.herokuapp.com/
 *
-* GitHub Repository URL: ______________________________________________________
+* GitHub Repository URL: https://github.com/Olive251/web322-app
 *
 ******************************************************************************
 **/

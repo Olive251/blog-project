@@ -1,7 +1,18 @@
-//Olivia Brown
-//112582192
-//obrown11@myseneca.ca
-//
+/*****************************************************************************
+****
+* WEB322 – Assignment 02
+* I declare that this assignment is my own work in accordance with Seneca Academic Policy. 
+No part * of this assignment has been copied manually or electronically from any other source 
+* (including 3rd party web sites) or distributed to other students.
+* 
+* Name: Olivia Brown Student ID: 112582192 Date: Feb 4, 2022
+*
+* Online (Heroku) URL: ________________________________________________________
+*
+* GitHub Repository URL: ______________________________________________________
+*
+******************************************************************************
+**/
 
 const fs = require("fs");
 
@@ -37,15 +48,16 @@ let initialize = async (pFile, cFile) =>
 
 let getCategories = () =>
 {
-    if (length.categories === 0)
-    {return "No results returned"}
+    if (categories.length === 0)
+    {return "No data found."}
     return categories; 
 }
 
 //read all the posts in posts array
 let getPosts = () =>
 {
-    return posts;
+    if (posts.length === 0) return "No data found.";
+    else return posts;
 }
 
 //read posts in posts array, taking only the published one
@@ -61,7 +73,8 @@ let getPublishedPosts = () =>
             published.push(posts[i]);
         }
     }
-    return published;
+    if (published.length === 0) return "No data found.";
+    else return published;
 }
 
 

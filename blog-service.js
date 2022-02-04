@@ -37,9 +37,13 @@ let initialize = async (pFile, cFile) =>
 
 let getCategories = () =>
 {
-    if (length.categories === 0)
-    {return "No results returned"}
-    return categories; 
+    return new Promise((resolve, reject) => {
+        if (categories.length === 0)
+        {
+            reject('No data found')
+        } 
+        else {resolve(categories)}
+    })
 }
 
 //read all the posts in posts array

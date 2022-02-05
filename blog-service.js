@@ -27,39 +27,21 @@ let categories = [];
 -added the awaits because categories array was loading as empty first time categories is loaded
 */
 
-/*let initialize = async (pFile, cFile) => 
-{
-    await fs.promises
-        .readFile(pFile, 'utf8')
-        .then( async (data) => {
-            posts = JSON.parse(data);
-            await fs.promises 
-                .readFile(cFile, 'utf8')
-                .then((data) => {
-                    categories = JSON.parse(data);
-                })
-                .catch((err) => {
-                    console.log(`ERROR: ${err}`);
-                })
-        })
-        .catch((err) => {
-            console.log(`ERROR: ${err}`);
-    })
-}*/
-
 let initialize = (pFile, cFile) =>
 {
     return new Promise((resolve, reject) => {
-        fs.readFile(pFile, 'utf8')
+        fs.promises.readFile(pFile, 'utf8')
         .then((data) => {
             posts = JSON.parse(data);
-            if (length.posts > 0){
-                fs.readFile(cFile, 'utf8')
+            //console.log(`Posts has ${posts.length} records`);
+            if (posts.length > 0){
+                fs.promises.readFile(cFile, 'utf8')
                 .then((data) => {
                     categories = JSON.parse(data);
-                    if(length.categories > 0)
+                    //console.log(`Categories has ${categories.length} records.`)
+                    if(categories.length > 0)
                     {
-                        resolve(`Initialization complete with ${length.posts} records in posts, and ${length.categories} records in categories`);
+                        resolve(`Initialization complete with ${posts.length} records in posts, and ${categories.length} records in categories`);
                     } else {
                         reject(`Initialization failed. No data found.`);
                     }
@@ -82,7 +64,7 @@ let getCategories = () =>
     return new Promise((resolve, reject) => {
         if (categories.length === 0)
         {
-            reject('No data found')
+            reject('No data found in categories')
         } 
         else {resolve(categories)}
     })

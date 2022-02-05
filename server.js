@@ -37,27 +37,40 @@ app.get('/about', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'about.html'));
 })
 
-//update to send JSON formatted string containing all posts in posts.json with published==true
+//displays records in posts array where published == true
 app.get('/blog', (req,res) => {
     res.send(bSvc.getPublishedPosts());
 })
 
-//json string all posts in posts.json
+//displays the contents of the posts array
 app.get('/posts', (req,res) => {
     res.send(bSvc.getPosts());
 })
 
-//json string categories in categories.json
+//displays the contents of the categories array
 app.get('/categories',  (req,res) => {
-    res.send(bSvc.getCategories());
+    bSvc.getCategories()
+    .then((message) => {
+        res.send(message);
+    })
+    .catch((message) =>{
+        res.send(message);
+    })
 })
 
-//add 404 error handler
+//404 error handler
 app.use((req,res) => {
     res.status(404).send('ERROR: 404! Page not found.');
 })
 
-app.listen(port, () => {
-    console.log(`App is listening at http://localhost:${port}`);
+//initializes posts and categories arrays before activating server
+bSvc.initialize(pFile, cFile)
+.then((message) => {
+    console.log(message);
+    app.listen(port, () =>{
+        console.log(`App is listening at http://localhost:${port}`);
+    })
 })
-
+.catch((message) =>{
+    console.log(message);
+})

@@ -44,7 +44,13 @@ app.get('/blog', (req,res) => {
 
 //displays the contents of the posts array
 app.get('/posts', (req,res) => {
-    res.send(bSvc.getPosts());
+    bSvc.getPosts()
+    .then((message) => {
+        res.send(message);
+    })
+    .catch((message) => {
+        res.send(message);
+    })
 })
 
 //displays the contents of the categories array

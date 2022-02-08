@@ -73,7 +73,11 @@ let getCategories = () =>
 //read all the posts in posts array
 let getPosts = () =>
 {
-    return posts;
+    return new Promise((resolve, reject) => {
+        if (posts.length === 0)
+        {reject('No data found in posts')}
+        else {resolve(posts)}
+    })
 }
 
 //read posts in posts array, taking only the published one

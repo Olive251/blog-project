@@ -74,7 +74,7 @@ bSvc.initialize(pFile, cFile)
 .then((message) => {
     console.log(message);
     app.listen(port, () =>{
-        console.log(`App is listening at http://localhost:${port}`);
+        console.log(`App is listening at ${port}`);
     })
 })
 .catch((message) =>{

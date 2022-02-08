@@ -81,19 +81,26 @@ let getPosts = () =>
 }
 
 //read posts in posts array, taking only the published one
-//export function getPublishedPosts()
-let getPublishedPosts = () =>
-{
-    let published = [];
-
-    for (i=0;i<posts.length;i++)
-    {
-        if (posts[i].published === true)
+let getPublishedPosts = () =>{
+    return new Promise((resolve, reject) => {
+        let published = [];
+        if (!posts.length <= 0)
         {
-            published.push(posts[i]);
-        }
-    }
-    return published;
+            for (i=0;i<posts.length;i++)
+            {
+                if (posts[i].published === true)
+                {
+                    published.push(posts[i]);
+                }
+            }
+            if (!published.length <=0)
+            {
+                resolve(published);
+            } else 
+            {reject("No published posts found")}
+        } else 
+        {reject('No data found in posts')}
+    })
 }
 
 

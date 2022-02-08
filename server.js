@@ -38,7 +38,13 @@ app.get('/about', (req,res) => {
 
 //displays records in posts array where published == true
 app.get('/blog', (req,res) => {
-    res.send(bSvc.getPublishedPosts());
+    bSvc.getPublishedPosts()
+    .then((message) => {
+        res.send(message);
+    })
+    .catch((message) => {
+        res.send(message);
+    })
 })
 
 //displays the contents of the posts array

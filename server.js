@@ -10,14 +10,24 @@ No part * of this assignment has been copied manually or electronically from any
 *
 * GitHub Repository URL: https://github.com/Olive251/web322-app
 *
-******************************************************************************
-**/
-
-
+******************************************************************************/
 const xps = require("express");
 const res = require("express/lib/response");
 const path = require("path");
 const bSvc = require("./blog-service.js");
+const streamifier = require("streamifier");
+const multer = require("multer");
+const { resolve } = require("path");
+const { rejects } = require("assert");
+const cloud = require("cloudinary").v2;
+
+cloud.config({ 
+    cloud_name: 'dypd4xgsd', 
+    api_key: '416493844922892', 
+    api_secret: 'hyT9Ji0PUjM-adFdFg81rnQgUww' 
+});
+
+const upload = multer();
 
 const app = xps();
 
@@ -29,6 +39,7 @@ const cFile = (path.join(__dirname, "data", "categories.json"));
 const pFile = (path.join(__dirname, "data", "posts.json"));
 
 //ROUTES
+//**********************************************/
 app.get('/', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'about.html'));
 })
@@ -37,6 +48,30 @@ app.get('/about', (req,res) => {
 })
 app.get('/posts/add', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'addPost.html'));
+})
+app.post('/posts/add', upload.single("photo"), (req, res) => {
+    let streamUpload = (req) => {
+        let stream = cloudinary.uploader.upload_stream(
+            (error, result) => {
+                if(result){
+                    resolve(result)
+                } else {
+                    rejects(error)
+                }
+            }
+        );
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+    }
+    async function upload(req) {
+        let result = await streamUpload(req);
+        console.log(result);
+        return result;
+    }
+    upload(req).then((uploaded) => {
+        req.body.featureImage = uploaded.url;
+        //TODO:
+        //Process the req.body and add it as a new Blog Post before redirecting to '/posts'
+    })
 })
 
 //displays records in posts array where published == true

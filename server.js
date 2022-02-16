@@ -28,12 +28,15 @@ const port = port = process.env.PORT || 8080;
 const cFile = (path.join(__dirname, "data", "categories.json"));
 const pFile = (path.join(__dirname, "data", "posts.json"));
 
-
+//ROUTES
 app.get('/', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'about.html'));
 })
 app.get('/about', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'about.html'));
+})
+app.get('/posts/add', (req,res) => {
+    res.sendFile(path.join(__dirname, 'views', 'addPost.html'));
 })
 
 //displays records in posts array where published == true

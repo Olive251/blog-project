@@ -49,6 +49,8 @@ app.get('/about', (req,res) => {
 app.get('/posts/add', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'addPost.html'));
 })
+
+//code per the assignment instructions
 app.post('/posts/add', upload.single("photo"), (req, res) => {
     let streamUpload = (req) => {
         let stream = cloudinary.uploader.upload_stream(
@@ -73,6 +75,7 @@ app.post('/posts/add', upload.single("photo"), (req, res) => {
         //Process the req.body and add it as a new Blog Post before redirecting to '/posts'
     })
 })
+
 
 //displays records in posts array where published == true
 app.get('/blog', (req,res) => {

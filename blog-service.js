@@ -103,6 +103,15 @@ let getPublishedPosts = () =>{
     })
 }
 
+//Must return a promise
+//if postData.published is undefined, explicityly set it to false, otherwise it should be set to true since "published" is triggered by a checkbox in form
+//explicitly set id property to be the length of the posts array +1
+//push the updated postData object onto the posts array and resolve the promise with the updated postData val
+//us function in the post /posts/add route before redirecting to the /posts route
+let addPost = (postData) => {
+
+}
+
 
 
 exports.initialize = initialize;

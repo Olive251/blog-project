@@ -109,7 +109,9 @@ let getPublishedPosts = () =>{
 //push the updated postData object onto the posts array and resolve the promise with the updated postData val
 //us function in the post /posts/add route before redirecting to the /posts route
 let addPost = (postData) => {
-
+    return new Promise((resolve, reject) => {
+        
+    })
 }
 
 

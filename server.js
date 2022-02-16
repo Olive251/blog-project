@@ -23,7 +23,7 @@ const app = xps();
 
 app.use(xps.static("./views/"));
 
-const port = port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
 
 const cFile = (path.join(__dirname, "data", "categories.json"));
 const pFile = (path.join(__dirname, "data", "posts.json"));

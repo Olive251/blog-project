@@ -109,18 +109,19 @@ let getPublishedPosts = () =>{
 //push the updated postData object onto the posts array and resolve the promise with the updated postData val
 //use function in the post /posts/add route before redirecting to the /posts route
 let addPost = (postData) => {
+    return new Promise((resolve, reject) => {
+        if (postData.published == undefined)
+        {
+            postData.published = false;
+        } 
+        else postData.published = true;
 
-    //set published property
-    if(postData.published == undefined)
-    {
-        postData.published = false;
-    } else postData.published = true;
+        postData.id = posts.length + 1;
 
-    //post id = length of array + 1
-    postData.id = posts.length + 1;
+        posts.push(postData);
+        resolve(postData);
 
-    posts.push(postData);
-
+    })
 }
 
 

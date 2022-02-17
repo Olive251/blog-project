@@ -107,8 +107,19 @@ let getPublishedPosts = () =>{
 //if postData.published is undefined, explicityly set it to false, otherwise it should be set to true since "published" is triggered by a checkbox in form
 //explicitly set id property to be the length of the posts array +1
 //push the updated postData object onto the posts array and resolve the promise with the updated postData val
-//us function in the post /posts/add route before redirecting to the /posts route
+//use function in the post /posts/add route before redirecting to the /posts route
 let addPost = (postData) => {
+
+    //set published property
+    if(postData.published == undefined)
+    {
+        postData.published = false;
+    } else postData.published = true;
+
+    //post id = length of array + 1
+    postData.id = posts.length + 1;
+
+    posts.push(postData);
 
 }
 
@@ -118,3 +129,4 @@ exports.initialize = initialize;
 exports.getPosts = getPosts;
 exports.getPublishedPosts = getPublishedPosts;
 exports.getCategories = getCategories;
+exports.addPost = addPost;

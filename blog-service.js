@@ -14,6 +14,7 @@ No part * of this assignment has been copied manually or electronically from any
 ******************************************************************************
 **/
 
+const res = require("express/lib/response");
 const fs = require("fs");
 
 let posts = [];
@@ -109,6 +110,7 @@ let getPublishedPosts = () =>{
 //push the updated postData object onto the posts array and resolve the promise with the updated postData val
 //use function in the post /posts/add route before redirecting to the /posts route
 let addPost = (postData) => {
+    console.log('Adding post...');
     return new Promise((resolve, reject) => {
         if (postData.published == undefined)
         {
@@ -118,7 +120,11 @@ let addPost = (postData) => {
 
         postData.id = posts.length + 1;
         posts.push(postData);
-        resolve(postData);
+        console.log(`Post ${postData.id} has been added to posts`)
+
+        resolve(getPosts());
+
+        
     })
 }
 

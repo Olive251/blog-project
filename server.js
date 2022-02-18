@@ -46,39 +46,39 @@ app.get('/about', (req,res) => {
 app.get('/posts/add', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'addPost.html'));
 })
-
 //post route for adding blog posts
 app.post('/posts/add', upload.single("featureImage"), (req, res) => {
     
     let streamUpload = (req) => {
-        let stream = cloudinary.uploader.upload_stream(
-            (error, result) => {
-                if(result){
-                    resolve(result)
-                } else {
-                    rejects(error)
+        return new Promise((resolve, reject) => {
+            let stream = cloudinary.uploader.upload_stream(
+                (error, result) => {
+                    if(result){
+                        console.log(result);
+                        resolve(result);
+                    } else {
+                        rejects(error);
+                    }
                 }
-            }
-        );
-        streamifier.createReadStream(req.file.buffer).pipe(stream);
+            );
+            streamifier.createReadStream(req.file.buffer).pipe(stream);
+        })
+        
     }
     async function upload(req) {
-        let result = await streamUpload(req);
-        console.log(`stream upload is: ${result}`);
-        return result;
+        let result = await streamUpload(req); 
+        return result; 
     }
-    upload(req).then((uploaded) => {
+    upload(req)
+    .then((uploaded) => {
         req.body.featureImage = uploaded.url;
-        //TODO:
-        //Process the req.body and add it as a new Blog Post before redirecting to '/posts'
-    })
-    bSvc.addPost(req.body)
-    .then((message) => {
-        //fs.writeFile(cFile, JSON.stringify(message))
-        res.send(message);
-    })
-    .catch((message) => {
-        res.send(message);
+    
+        bSvc.addPost(req.body)
+        .then(bSvc.getPosts()
+            .then((message)=> {
+                res.send(message);
+            }))            
+        .catch(res.send)        
     })
 })
 
@@ -119,6 +119,7 @@ app.get('/categories',  (req,res) => {
 //404 error handler
 app.use((req,res) => {
     res.status(404).send('ERROR: 404! Page not found.');
+    
 })
 
 //initializes posts and categories arrays before activating server

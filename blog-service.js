@@ -116,19 +116,9 @@ let addPost = (postData) => {
         } 
         else postData.published = true;
 
-        if(postData.Body.length < 1)
-        {
-            reject(`Post length is not long enough.`)
-        }
-        else if (postData.Title.length < 1)
-        {
-            reject(`Post title is not long enough.`)
-        }
-        else{
-            postData.id = posts.length + 1;
-            posts.push(postData);
-            resolve(postData);
-        }     
+        postData.id = posts.length + 1;
+        posts.push(postData);
+        resolve(postData);
     })
 }
 

@@ -12,15 +12,13 @@ No part * of this assignment has been copied manually or electronically from any
 *
 ******************************************************************************/
 const xps = require("express");
-const res = require("express/lib/response");
 const path = require("path");
 const bSvc = require("./blog-service.js");
 const streamifier = require("streamifier");
 const multer = require("multer");
-const { fstat } = require("fs");
-const cloud = require("cloudinary").v2;
+const cloudinary = require("cloudinary").v2;
 
-cloud.config({ 
+cloudinary.config({ 
     cloud_name: 'dypd4xgsd', 
     api_key: '416493844922892', 
     api_secret: 'hyT9Ji0PUjM-adFdFg81rnQgUww' 
@@ -50,7 +48,7 @@ app.get('/posts/add', (req,res) => {
 })
 
 //post route for adding blog posts
-app.post('/posts/add', upload.single("photo"), (req, res) => {
+app.post('/posts/add', upload.single("featureImage"), (req, res) => {
     
     let streamUpload = (req) => {
         let stream = cloudinary.uploader.upload_stream(
@@ -66,7 +64,7 @@ app.post('/posts/add', upload.single("photo"), (req, res) => {
     }
     async function upload(req) {
         let result = await streamUpload(req);
-        console.log(result);
+        console.log(`stream upload is: ${result}`);
         return result;
     }
     upload(req).then((uploaded) => {

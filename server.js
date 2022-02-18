@@ -46,6 +46,8 @@ app.get('/about', (req,res) => {
 app.get('/posts/add', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'addPost.html'));
 })
+
+
 //post route for adding blog posts
 app.post('/posts/add', upload.single("featureImage"), (req, res) => {
     
@@ -69,7 +71,7 @@ app.post('/posts/add', upload.single("featureImage"), (req, res) => {
         let result = await streamUpload(req); 
         return result; 
     }
-    upload(req)
+    upload(req) //should add means of handle if photo not uploaded
     .then((uploaded) => {
         req.body.featureImage = uploaded.url;
     

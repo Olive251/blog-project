@@ -81,8 +81,6 @@ app.post('/posts/add', upload.single("featureImage"), (req, res) => {
         .catch(res.send)        
     })
 })
-
-
 //displays records in posts array where published == true
 app.get('/blog', (req,res) => {
     bSvc.getPublishedPosts()
@@ -93,7 +91,6 @@ app.get('/blog', (req,res) => {
         res.send(message);
     })
 })
-
 //displays the contents of the posts array
 app.get('/posts', (req,res) => {
     bSvc.getPosts()
@@ -104,7 +101,6 @@ app.get('/posts', (req,res) => {
         res.send(message);
     })
 })
-
 //displays the contents of the categories array
 app.get('/categories',  (req,res) => {
     bSvc.getCategories()
@@ -115,13 +111,11 @@ app.get('/categories',  (req,res) => {
         res.send(message);
     })
 })
-
 //404 error handler
 app.use((req,res) => {
     res.status(404).send('ERROR: 404! Page not found.');
     
 })
-
 //initializes posts and categories arrays before activating server
 bSvc.initialize(pFile, cFile)
 .then((message) => {

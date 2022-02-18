@@ -17,8 +17,7 @@ const path = require("path");
 const bSvc = require("./blog-service.js");
 const streamifier = require("streamifier");
 const multer = require("multer");
-const { resolve } = require("path");
-const { rejects } = require("assert");
+const { fstat } = require("fs");
 const cloud = require("cloudinary").v2;
 
 cloud.config({ 
@@ -27,7 +26,7 @@ cloud.config({
     api_secret: 'hyT9Ji0PUjM-adFdFg81rnQgUww' 
 });
 
-const upload = multer();
+const upload = multer(); //Disk storage not used
 
 const app = xps();
 
@@ -50,8 +49,9 @@ app.get('/posts/add', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'addPost.html'));
 })
 
-//code per the assignment instructions
+//post route for adding blog posts
 app.post('/posts/add', upload.single("photo"), (req, res) => {
+    
     let streamUpload = (req) => {
         let stream = cloudinary.uploader.upload_stream(
             (error, result) => {
@@ -73,6 +73,14 @@ app.post('/posts/add', upload.single("photo"), (req, res) => {
         req.body.featureImage = uploaded.url;
         //TODO:
         //Process the req.body and add it as a new Blog Post before redirecting to '/posts'
+    })
+    bSvc.addPost(req.body)
+    .then((message) => {
+        //fs.writeFile(cFile, JSON.stringify(message))
+        res.send(message);
+    })
+    .catch((message) => {
+        res.send(message);
     })
 })
 

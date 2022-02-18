@@ -11,9 +11,7 @@ No part * of this assignment has been copied manually or electronically from any
 *
 * GitHub Repository URL: https://github.com/Olive251/web322-app
 *
-******************************************************************************
-**/
-
+******************************************************************************/
 const fs = require("fs");
 
 let posts = [];
@@ -28,6 +26,13 @@ let verifyArray = (array) =>
     else verification = true;
 
     return verification;
+}
+
+let dateStrComp = (postDate, searchDate) =>
+{
+    let pDate = new Date(postDate);
+    let sDate = new Date(searchDate);
+    return (pDate >= sDate);
 }
 
 
@@ -79,7 +84,6 @@ let getCategories = () =>
     })
 }
 
-//read all the posts in posts array
 let getPosts = () =>
 {
     return new Promise((resolve, reject) => {
@@ -92,7 +96,7 @@ let getPosts = () =>
 let getPostsByCategory = (categoryID) => {
     return new Promise((resolve, reject) => {
         selection = [];
-        if (posts.length === 0)
+        if (!verifyArray(posts))//(posts.length === 0)
         { reject('No data found in posts')}
         else
         {
@@ -120,11 +124,17 @@ let getPostsByMinDate= (minDateStr) =>
         {
             reject('No data found in posts')
         }
-        else {
+        else 
+        {
             for (i=0;i<posts.length;i++)
             {
-                //if (posts[i])
+                if (dateStrComp(posts[i].postDate, minDateStr))
+                {
+                    console.log(dateStrComp(posts[i].postDate, minDateStr));
+                    selection.push(posts[i]);
+                }
             }
+            resolve(selection);
         }
     })
 }
@@ -141,7 +151,7 @@ let getPostByID = (searchID) =>
         else {
             for (i=0;i<posts.length;i++)
             {
-                if (posts[i].id === searchID)
+                if (posts[i].id == searchID)
                 {
                     selection = posts[i]
                 }
@@ -156,11 +166,11 @@ let getPostByID = (searchID) =>
     })
 }
 
-//read posts in posts array, taking only the published one
+
 let getPublishedPosts = () =>{
     return new Promise((resolve, reject) => {
         let published = [];
-        if (!posts.length <= 0)
+        if (verifyArray(posts))
         {
             for (i=0;i<posts.length;i++)
             {
@@ -179,11 +189,6 @@ let getPublishedPosts = () =>{
     })
 }
 
-//Must return a promise
-//if postData.published is undefined, explicityly set it to false, otherwise it should be set to true since "published" is triggered by a checkbox in form
-//explicitly set id property to be the length of the posts array +1
-//push the updated postData object onto the posts array and resolve the promise with the updated postData val
-//use function in the post /posts/add route before redirecting to the /posts route
 let addPost = (postData) => {
     console.log('Adding post...');
     return new Promise((resolve, reject) => {

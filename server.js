@@ -46,8 +46,6 @@ app.get('/about', (req,res) => {
 app.get('/posts/add', (req,res) => {
     res.sendFile(path.join(__dirname, 'views', 'addPost.html'));
 })
-
-
 //post route for adding blog posts
 app.post('/posts/add', upload.single("featureImage"), (req, res) => {
     
@@ -93,6 +91,15 @@ app.get('/blog', (req,res) => {
         res.send(message);
     })
 })
+app.get('/posts/:postID', (req, res) => {
+    bSvc.getPostByID(req.params.postID)
+    .then((message) => {
+        res.send(message);
+    })
+    .catch((message)=> {
+        res.send(message);
+    })
+})
 //displays the contents of the posts array
 app.get('/posts', (req,res) => {    
     if (req.query.category !== undefined)
@@ -103,6 +110,7 @@ app.get('/posts', (req,res) => {
     } 
     else if (req.query.minDate !== undefined)
     {
+        console.log(`minDate search received: ${req.query.minDate}`);
         bSvc.getPostsByMinDate(req.query.minDate)
         .then((message) => {res.send(message);})
         .catch((message) => {res.send(message);})
@@ -115,9 +123,7 @@ app.get('/posts', (req,res) => {
     .catch((message) => {
         res.send(message);
     }) 
-    }
-
-       
+    }       
 })
 
 //displays the contents of the categories array

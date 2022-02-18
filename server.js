@@ -94,15 +94,32 @@ app.get('/blog', (req,res) => {
     })
 })
 //displays the contents of the posts array
-app.get('/posts', (req,res) => {
-    bSvc.getPosts()
+app.get('/posts', (req,res) => {    
+    if (req.query.category !== undefined)
+    {
+        bSvc.getPostsByCategory(req.query.category)
+        .then((message) => {res.send(message);})
+        .catch((message) => {res.send(message);})
+    } 
+    else if (req.query.minDate !== undefined)
+    {
+        bSvc.getPostsByMinDate(req.query.minDate)
+        .then((message) => {res.send(message);})
+        .catch((message) => {res.send(message);})
+    }
+    else {
+        bSvc.getPosts()
     .then((message) => {
         res.send(message);
     })
     .catch((message) => {
         res.send(message);
-    })
+    }) 
+    }
+
+       
 })
+
 //displays the contents of the categories array
 app.get('/categories',  (req,res) => {
     bSvc.getCategories()

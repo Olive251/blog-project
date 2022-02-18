@@ -14,13 +14,21 @@ No part * of this assignment has been copied manually or electronically from any
 ******************************************************************************
 **/
 
-const res = require("express/lib/response");
 const fs = require("fs");
 
 let posts = [];
 let categories = [];
 
 //Each function needs to have error hadling
+
+let verifyArray = (array) =>
+{
+    let verification;
+    if (array.length < 1) verification = false;
+    else verification = true;
+
+    return verification;
+}
 
 
 /*
@@ -81,6 +89,73 @@ let getPosts = () =>
     })
 }
 
+let getPostsByCategory = (categoryID) => {
+    return new Promise((resolve, reject) => {
+        selection = [];
+        if (posts.length === 0)
+        { reject('No data found in posts')}
+        else
+        {
+            for (i=0;i<posts.length;i++)
+            {
+                if (posts[i].category == categoryID)
+                {
+                    selection.push(posts[i]);
+                }
+            }
+            if (selection.length < 1)
+            {reject(`No posts found in categoryID "${categoryID}"`)}
+            else {
+                resolve(selection);
+            }
+        }
+    })
+}
+
+let getPostsByMinDate= (minDateStr) => 
+{
+    return new Promise ((resolve, reject) => {
+        selection = [];
+        if (!verifyArray(posts))
+        {
+            reject('No data found in posts')
+        }
+        else {
+            for (i=0;i<posts.length;i++)
+            {
+                //if (posts[i])
+            }
+        }
+    })
+}
+
+let getPostByID = (searchID) => 
+{
+    return new Promise((resolve, reject) =>{
+        let selection;
+
+        if (!verifyArray(posts))
+        {
+            reject('No data found in posts')
+        }
+        else {
+            for (i=0;i<posts.length;i++)
+            {
+                if (posts[i].id === searchID)
+                {
+                    selection = posts[i]
+                }
+            }
+            if (selection == undefined)
+            {
+                reject(`No post found with ID "${searchID}"`);
+            } else {
+                resolve(selection);
+            }
+        }
+    })
+}
+
 //read posts in posts array, taking only the published one
 let getPublishedPosts = () =>{
     return new Promise((resolve, reject) => {
@@ -128,8 +203,9 @@ let addPost = (postData) => {
     })
 }
 
-
-
+exports.getPostByID = getPostByID;
+exports.getPostsByMinDate = getPostsByMinDate
+exports.getPostsByCategory = getPostsByCategory;
 exports.initialize = initialize;
 exports.getPosts = getPosts;
 exports.getPublishedPosts = getPublishedPosts;

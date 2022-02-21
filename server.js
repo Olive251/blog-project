@@ -34,7 +34,7 @@ const upload = multer(); //Disk storage not used
 const app = xps();
 
 app.engine('.hbs', handlebars.engine({extname: '.hbs'}));
-app.set('view engine', 'handlebars');
+app.set('view engine', 'hbs');
 app.set('views', './views');
 
 app.use(xps.static("./views/"));
@@ -47,13 +47,13 @@ const pFile = (path.join(__dirname, "data", "posts.json"));
 //ROUTES
 //**********************************************/
 app.get('/', (req,res) => {
-    res.sendFile(path.join(__dirname, 'views', 'about.html'));
+    res.render('about');
 })
 app.get('/about', (req,res) => {
     res.render('about');
 })
 app.get('/posts/add', (req,res) => {
-    res.sendFile(path.join(__dirname, 'views', 'addPost.html'));
+    res.render('addPost');
 })
 //post route for adding blog posts
 app.post('/posts/add', upload.single("featureImage"), (req, res) => {

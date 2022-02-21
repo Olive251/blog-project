@@ -18,16 +18,24 @@ const bSvc = require("./blog-service.js");
 const streamifier = require("streamifier");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
+const handlebars = require('express-handlebars');
 
+//cloudinary settings
 cloudinary.config({ 
     cloud_name: 'dypd4xgsd', 
     api_key: '416493844922892', 
     api_secret: 'hyT9Ji0PUjM-adFdFg81rnQgUww' 
 });
 
+//multer settings
 const upload = multer(); //Disk storage not used
 
+//app using express
 const app = xps();
+
+app.engine('.hbs', handlebars.engine({extname: '.hbs'}));
+app.set('view engine', 'handlebars');
+app.set('views', './views');
 
 app.use(xps.static("./views/"));
 

@@ -9,7 +9,7 @@ No part * of this assignment has been copied manually or electronically from any
 *
 * Online (Heroku) URL: https://web322-assignment3-oliviabrown.herokuapp.com/
 *
-* GitHub Repository URL: https://github.com/Olive251/web322-app
+* GitHub Repository URL: https://github.com/Olive251/web322-app/tree/Assignment-part-3
 *           !!!(IN THE ASSIGNMENT-PART-3 BRANCH)!!!
 *
 ******************************************************************************/

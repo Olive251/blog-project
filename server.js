@@ -44,6 +44,14 @@ const port = process.env.PORT || 8080;
 const cFile = (path.join(__dirname, "data", "categories.json"));
 const pFile = (path.join(__dirname, "data", "posts.json"));
 
+//added per assignment instructions
+app.use((req,res,next) => {
+    let route = req.path.substring(1);
+    app.locals.activeRoute = (route == "/") ? "/" : "/" + route.replace(/\/(.*)/,"");
+    app.locals.viewingCategory = req.query.category;
+    next();
+})
+
 //ROUTES
 //**********************************************/
 app.get('/', (req,res) => {

@@ -21,8 +21,6 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 
 
-
-
 //cloudinary settings
 cloudinary.config({ 
     cloud_name: 'dypd4xgsd', 

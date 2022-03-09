@@ -13,12 +13,15 @@ No part * of this assignment has been copied manually or electronically from any
 *
 ******************************************************************************/
 const xps = require("express");
+const handlebars = require('express-handlebars');
 const path = require("path");
 const bSvc = require("./blog-service.js");
 const streamifier = require("streamifier");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
-const handlebars = require('express-handlebars');
+
+
+
 
 //cloudinary settings
 cloudinary.config({ 
@@ -33,11 +36,34 @@ const upload = multer(); //Disk storage not used
 //app using express
 const app = xps();
 
-app.engine('.hbs', handlebars.engine({extname: '.hbs'}));
+//handlebars helpers
+const hbs = handlebars.create({
+    extname: '.hbs',
+    //custom helpers
+    helpers: {
+        navLink: (url, options) => {
+            return'<li' +
+                ((url == app.locals.activeRoute)? 'class="active"':"") +
+                '><a href="' + url + '">' + options.fn(this) + '</a></li>';
+        },
+        equal: (lvalue, rvalue, options) => {
+            if (isArgumentsObject.length < 3){
+                throw new Error("Handlbars Helper EQUAL needs 2 parameters");
+            }
+            if (lvalue != rvalue){
+                return options.inverse(this);
+            } else {
+                return options.fn(this);
+            }
+        }
+    }
+
+})
+
+app.engine('.hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', './views');
 
-app.use(xps.static("./views/"));
 
 const port = process.env.PORT || 8080;
 

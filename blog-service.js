@@ -103,13 +103,13 @@ let getPostsByCategory = (categoryID) => {
         {
             for (i=0;i<posts.length;i++)
             {
-                if (posts[i].category == categoryID)
-                {
+                if (posts[i].category == categoryID) {
                     selection.push(posts[i]);
                 }
             }
-            if (selection.length < 1)
-            {reject(`No posts found in categoryID "${categoryID}"`)}
+            if (selection.length < 1){
+                reject(`No posts found in categoryID "${categoryID}"`);
+            }
             else {
                 resolve(selection);
             }

@@ -1,14 +1,38 @@
+
 <div class="row">
     <div class="col-md-12">
+        {{#unless post}}
+            <div class="col-md-12 text-center">
+                <strong>{{message}}</strong>
+            </div>
+        {{/unless}}
         <h2>Posts</h2>
-        <hr />
-        {{#if error}}
-            <h4 id="posts-error">{{error}}</h4>
-        {{/if}}
+        <hr/>
         {{#if post}}
-            {{#each post}}
-            <p>Title: <strong>{{this.title}}</strong></p>
-            {{/each}}
+            <div class = "table-responsive">
+            <table class="table">
+               <thead>
+                    <tr>
+                        <th><strong>Post ID</strong></th>
+                        <th><strong>Title</strong></th>
+                        <th><strong>Post Date</strong></th>
+                        <th><strong>Category</strong></th>
+                        <th><strong>Published</strong></th>
+                    </tr>
+               </thead>
+               <tbody>
+               {{#each post}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>{{this.title}}</td>
+                    <td>{{this.postDate}}</td>
+                    <td><a href="/posts?category={{this.category}}">{{this.category}}</a></td>
+                    <td>{{this.published}}</td>
+                </tr>
+               {{/each}}
+               </tbody>
+            </table>
+            </div>
         {{/if}}
-    </div>
+    </div>  
 </div>

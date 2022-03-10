@@ -149,8 +149,8 @@ app.get('/posts', (req,res) => {
         .then((data) => {
             res.render('posts', {post: data});
         })
-        .catch((error) => {
-            res.render('posts', {error: "no results"});
+        .catch((message) => {
+            res.render('posts', {error: message});
         })
     } 
     else if (req.query.minDate !== undefined)
@@ -166,7 +166,7 @@ app.get('/posts', (req,res) => {
             res.render('posts', {post: data} );
     })
     .catch((error) => {
-        res.render('posts', {error: "no results"});
+        res.render('posts', {message: error});
     }) 
     }       
 })
@@ -174,11 +174,11 @@ app.get('/posts', (req,res) => {
 //displays the contents of the categories array
 app.get('/categories',  (req,res) => {
     bSvc.getCategories()
-    .then((message) => {
-        res.send(message);
+    .then((data) => {
+        res.render('categories', {category: data});
     })
-    .catch((message) =>{
-        res.send(message);
+    .catch((error) =>{
+        res.render('categories', {message: error});
     })
 })
 //404 error handler

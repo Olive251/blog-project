@@ -98,7 +98,7 @@ app.post('/posts/add', upload.single("featureImage"), (req, res) => {
                         console.log(result);
                         resolve(result);
                     } else {
-                        rejects(error);
+                        reject(error);
                     }
                 }
             );

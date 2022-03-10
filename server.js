@@ -146,23 +146,27 @@ app.get('/posts', (req,res) => {
     if (req.query.category !== undefined)
     {
         bSvc.getPostsByCategory(req.query.category)
-        .then((message) => {res.send(message);})
-        .catch((message) => {res.send(message);})
+        .then((data) => {
+            res.render('posts', {post: data});
+        })
+        .catch((error) => {
+            res.render('posts', {error: "no results"});
+        })
     } 
     else if (req.query.minDate !== undefined)
     {
         console.log(`minDate search received: ${req.query.minDate}`);
         bSvc.getPostsByMinDate(req.query.minDate)
-        .then((message) => {res.send(message);})
-        .catch((message) => {res.send(message);})
+        .then((data) => {res.render('posts', {post: data});})
+        .catch((error) => {res.render('posts', {error: error});})
     }
     else {
         bSvc.getPosts()
-    .then((message) => {
-        res.send(message);
+    .then((data) => {
+            res.render('posts', {post: data} );
     })
-    .catch((message) => {
-        res.send(message);
+    .catch((error) => {
+        res.render('posts', {error: "no results"});
     }) 
     }       
 })

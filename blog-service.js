@@ -89,7 +89,7 @@ let getPosts = () =>
 {
     return new Promise((resolve, reject) => {
         if (posts.length === 0)
-        {reject('No data found in posts')}
+        {reject('No posts found')}
         else {resolve(posts)}
     })
 }
@@ -98,7 +98,7 @@ let getPostsByCategory = (categoryID) => {
     return new Promise((resolve, reject) => {
         selection = [];
         if (!verifyArray(posts))//(posts.length === 0)
-        { reject('No data found in posts')}
+        { reject('No posts found')}
         else
         {
             for (i=0;i<posts.length;i++)
@@ -123,7 +123,7 @@ let getPostsByMinDate= (minDateStr) =>
         selection = [];
         if (!verifyArray(posts))
         {
-            reject('No data found in posts')
+            reject('No posts found')
         }
         else 
         {
@@ -135,7 +135,8 @@ let getPostsByMinDate= (minDateStr) =>
                     selection.push(posts[i]);
                 }
             }
-            resolve(selection);
+            if (selection.length < 1) reject(`No posts found after ${minDateStr}`)
+            else resolve(selection);
         }
     })
 }

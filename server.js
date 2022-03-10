@@ -75,6 +75,7 @@ app.use((req,res,next) => {
     app.locals.viewingCategory = req.query.category;
     next();
 })
+app.use(xps.static('public'));
 
 //ROUTES
 //**********************************************/
@@ -86,6 +87,9 @@ app.get('/about', (req,res) => {
 })
 app.get('/posts/add', (req,res) => {
     res.render('addPost');
+})
+app.get('/public/css/main.css', (req, res) =>{
+    res.send()
 })
 //post route for adding blog posts
 app.post('/posts/add', upload.single("featureImage"), (req, res) => {

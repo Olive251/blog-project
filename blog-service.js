@@ -171,7 +171,7 @@ let getPostByID = (searchID) =>
 
 let getPublishedPosts = () =>{
     return new Promise((resolve, reject) => {
-        console.trace();
+        
         let published = [];
         if (verifyArray(posts))
         {

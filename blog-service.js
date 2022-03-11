@@ -206,9 +206,12 @@ let addPost = (postData) => {
 
         postData.id = posts.length + 1;
         posts.push(postData);
-        console.log(`Post ${postData.id} has been added to posts`)
 
-        resolve(getPosts());        
+        if (postData.id > posts.length) reject("Error! Post not added!");
+        else{
+            console.log(`Post ${postData.id} has been added to posts`)
+            resolve(getPosts());  
+        }
     })
 }
 

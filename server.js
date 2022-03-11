@@ -42,7 +42,7 @@ const hbs = handlebars.create({
         },
         equal: (lvalue, rvalue, options) => {
             if (isArgumentsObject.length < 3){
-                throw new Error("Handlbars Helper EQUAL needs 2 parameters");
+                throw new Error(`Handlbars helper "EQUAL" needs 2 parameters`);
             }
             if (lvalue != rvalue){
                 return options.inverse(this);
@@ -111,7 +111,7 @@ app.post('/posts/add', upload.single("featureImage"), (req, res) => {
         let result = await streamUpload(req); 
         return result; 
     }
-    upload(req) //should add means of handle if photo not uploaded
+    upload(req)
     .then((uploaded) => {
         req.body.featureImage = uploaded.url;
     
@@ -151,14 +151,48 @@ app.get('/blog', async(req,res) => {
 
     res.render("blog", {data: viewData});
 })
+
 app.get('/posts/:postID', (req, res) => {
     bSvc.getPostByID(req.params.postID)
-    .then((message) => {
-        res.send(message);
+    .then((data) => {
+        res.render('posts', {post: data});
     })
-    .catch((message)=> {
-        res.send(message);
+    .catch((err)=> {
+        res.render('posts', {message: err});
     })
+})
+
+app.get('/blog/:id', async(req,res) =>  {
+    let viewData = {};
+
+    try{
+        let posts = [];
+
+        if(req.query.category) posts = await bSvc.getPublishedPostsByCat(req.query.cateogy);
+        else posts = await bSvc.getPublishedPosts();
+
+        posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate))
+        viewData.posts=posts;
+    }
+    catch(err){
+        viewData.message="no results";
+    }
+    //getting post by id
+    try{
+        viewData.post = await bSvc.getPostByID(req.params.id);
+    }
+    catch(err){
+        viewData.message = "no results";
+    }
+    //getting category list
+    try{
+        let categories = await blogData.getCategories();
+        viewData.categories = categories;
+    }
+    catch(err){
+        viewData.categoriesMessage = "no results";
+    }
+    res.render("blog", {data: viewData});
 })
 //displays the contents of the posts array
 app.get('/posts', (req,res) => {    

@@ -55,7 +55,6 @@ const hbs = handlebars.create({
             }
         }
     }
-
 })
 
 app.engine('.hbs', hbs.engine);
@@ -174,7 +173,6 @@ app.get('/posts', (req,res) => {
     }) 
     }       
 })
-
 //displays the contents of the categories array
 app.get('/categories',  (req,res) => {
     bSvc.getCategories()

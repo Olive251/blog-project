@@ -36,12 +36,6 @@ let dateStrComp = (postDate, searchDate) =>
     return (pDate >= sDate);
 }
 
-
-/*
--reads json files and puts them into arrays
--added the awaits because categories array was loading as empty first time categories is loaded
-*/
-
 let initialize = (pFile, cFile) =>
 {
     return new Promise((resolve, reject) => {
@@ -62,14 +56,14 @@ let initialize = (pFile, cFile) =>
                     }
                 })
                 .catch((err) => {
-                    reject(`Initialization failed!\nERROR: ${err}`);
+                    reject(`Initialization failed!\n${err}`);
                 })
             } else{
                 reject(`Initialization failed! No data found.`);
             }
         })
         .catch((err) => {
-            reject(`Initialization failed!\nERROR: ${err}`);
+            reject(`Initialization failed!\n${err}`);
         })
     })
 }
@@ -167,7 +161,6 @@ let getPostByID = (searchID) =>
         }
     })
 }
-
 
 let getPublishedPosts = () =>{
     return new Promise((resolve, reject) => {

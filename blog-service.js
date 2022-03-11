@@ -185,8 +185,17 @@ let getPublishedPosts = () =>{
     })
 }
 
-let getPublishedPostsByCat = (category) => {
-    
+let getPublishedPostsByCat = async(cat) =>  {
+    let selection = [];
+    let published = await getPublishedPosts();
+    if (typeof(published) == "string") return published;
+
+    published.forEach(post => {
+        if (post.category === cat)    {
+            selection.push(post);
+        }
+    })
+    return selection;
 }
 
 let addPost = (postData) => {
@@ -214,5 +223,6 @@ exports.getPostsByCategory = getPostsByCategory;
 exports.initialize = initialize;
 exports.getPosts = getPosts;
 exports.getPublishedPosts = getPublishedPosts;
+exports.getPublishedPostsByCat = getPublishedPostsByCat;
 exports.getCategories = getCategories;
 exports.addPost = addPost;

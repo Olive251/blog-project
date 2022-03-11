@@ -123,15 +123,33 @@ app.post('/posts/add', upload.single("featureImage"), (req, res) => {
         .catch(res.send)        
     })
 })
-//displays records in posts array where published == true
-app.get('/blog', (req,res) => {
-    bSvc.getPublishedPosts()
-    .then((message) => {
-        res.send(message);
-    })
-    .catch((message) => {
-        res.send(message);
-    })
+app.get('/blog', async(req,res) => {
+    let viewData = {};
+
+    try{
+        let posts = [];
+        //checking for category query
+        if(req.query.ccategory) posts = await bSvc.getPublishedPostsByCat(req.query.category);
+        else posts = await bSvc.getPublishedPosts();
+        //sorting posts by date
+        posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate));
+        //get latest post
+        let post = posts[0];
+        //storing post(s) to be passed to the view
+        viewData.posts = posts;
+        viewData.post = post;
+    }
+    catch(err) {viewData.message="no results";}
+
+    try{
+        let categories = await bSvc.getCategories();
+
+        //store categories in viewData
+        viewData.categories = categories;
+    }
+    catch(err){viewData.categoriesMessage = "no results";}
+
+    res.render("blog", {data: viewData});
 })
 app.get('/posts/:postID', (req, res) => {
     bSvc.getPostByID(req.params.postID)
@@ -183,7 +201,7 @@ app.get('/categories',  (req,res) => {
 })
 //404 error handler
 app.use((req,res) => {
-    res.status(404).send('ERROR: 404! Page not found.');
+    res.status(404).render('404');
     
 })
 //initializes posts and categories arrays before activating server

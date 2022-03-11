@@ -19,6 +19,7 @@ const bSvc = require("./blog-service.js");
 const streamifier = require("streamifier");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
+const stripJs = require('strip-js');
 
 cloudinary.config({ 
     cloud_name: 'dypd4xgsd', 
@@ -48,6 +49,9 @@ const hbs = handlebars.create({
             } else {
                 return options.fn(this);
             }
+        },
+        safeHTML: (context) => {
+            return stripJs(context);
         }
     }
 })

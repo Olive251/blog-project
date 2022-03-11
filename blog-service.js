@@ -185,6 +185,10 @@ let getPublishedPosts = () =>{
     })
 }
 
+let getPublishedPostsByCat = (category) => {
+    
+}
+
 let addPost = (postData) => {
     console.log('Adding post...');
     return new Promise((resolve, reject) => {

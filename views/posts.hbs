@@ -23,8 +23,8 @@
                <tbody>
                {{#each post}}
                 <tr>
-                    <td>{{this.id}}</td>
-                    <td>{{this.title}}</td>
+                    <td><a href="/blog/{{this.id}}">{{this.id}}</a></td>
+                    <td><a href="/blog/{{this.id}}">{{this.title}}</a></td>
                     <td>{{this.postDate}}</td>
                     <td><a href="/posts?category={{this.category}}">{{this.category}}</a></td>
                     <td>{{this.published}}</td>

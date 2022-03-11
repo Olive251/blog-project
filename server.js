@@ -76,9 +76,35 @@ app.use(xps.static('public'));
 
 //ROUTES
 //**********************************************/
-app.get('/', (req,res) => {
-    res.render('about');
+app.get('/', async(req,res) => {
+    let viewData = {};
+
+    try{
+        let posts = [];
+        //checking for category query
+        if(req.query.ccategory) posts = await bSvc.getPublishedPostsByCat(req.query.category);
+        else posts = await bSvc.getPublishedPosts();
+        //sorting posts by date
+        posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate));
+        //get latest post
+        let post = posts[0];
+        //storing post(s) to be passed to the view
+        viewData.posts = posts;
+        viewData.post = post;
+    }
+    catch(err) {viewData.message="no results";}
+
+    try{
+        let categories = await bSvc.getCategories();
+
+        //store categories in viewData
+        viewData.categories = categories;
+    }
+    catch(err){viewData.categoriesMessage = "no results";}
+
+    res.render("blog", {data: viewData});
 })
+
 app.get('/about', (req,res) => {
     res.render('about');
 })
@@ -105,7 +131,6 @@ app.post('/posts/add', upload.single("featureImage"), (req, res) => {
             );
             streamifier.createReadStream(req.file.buffer).pipe(stream);
         })
-        
     }
     async function upload(req) {
         let result = await streamUpload(req); 
@@ -117,10 +142,10 @@ app.post('/posts/add', upload.single("featureImage"), (req, res) => {
     
         bSvc.addPost(req.body)
         .then(bSvc.getPosts()
-            .then((message)=> {
-                res.send(message);
+            .then((data)=> {
+                res.send(data);
             }))            
-        .catch(res.send)        
+        .catch(res.send)       
     })
 })
 app.get('/blog', async(req,res) => {
@@ -150,16 +175,6 @@ app.get('/blog', async(req,res) => {
     catch(err){viewData.categoriesMessage = "no results";}
 
     res.render("blog", {data: viewData});
-})
-
-app.get('/posts/:postID', (req, res) => {
-    bSvc.getPostByID(req.params.postID)
-    .then((data) => {
-        res.render('posts', {post: data});
-    })
-    .catch((err)=> {
-        res.render('posts', {message: err});
-    })
 })
 
 app.get('/blog/:id', async(req,res) =>  {
@@ -222,6 +237,15 @@ app.get('/posts', (req,res) => {
         res.render('posts', {message: error});
     }) 
     }       
+})
+app.get('/posts/:postID', (req, res) => {
+    bSvc.getPostByID(req.params.postID)
+    .then((data) => {
+        res.render('posts', {post: data});
+    })
+    .catch((err)=> {
+        res.render('posts', {message: err});
+    })
 })
 //displays the contents of the categories array
 app.get('/categories',  (req,res) => {

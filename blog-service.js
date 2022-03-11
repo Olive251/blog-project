@@ -142,22 +142,15 @@ let getPostByID = (searchID) =>
 
         if (!verifyArray(posts))
         {
-            reject('No data found in posts')
+            reject('Nothing found')
         }
         else {
             for (i=0;i<posts.length;i++)
             {
-                if (posts[i].id == searchID)
-                {
-                    selection = posts[i]
-                }
+                if (posts[i].id == searchID) selection = posts[i]
             }
-            if (selection == undefined)
-            {
-                reject(`No post found with ID "${searchID}"`);
-            } else {
-                resolve(selection);
-            }
+            if (selection == undefined) reject(`No post found with ID "${searchID}"`);
+            else resolve(selection);
         }
     })
 }
@@ -204,6 +197,13 @@ let addPost = (postData) => {
         if (postData.published == undefined) postData.published = false;
         else postData.published = true;
 
+        //prepping date
+        pDate = new Date();
+        var dd = String(pDate.getDate()).padStart(2, '0');
+        var mm = String(pDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = pDate.getFullYear();
+
+        postData.postDate = `${yyyy}/${mm}/${dd}`;
         postData.id = posts.length + 1;
         posts.push(postData);
 

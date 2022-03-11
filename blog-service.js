@@ -201,19 +201,14 @@ let getPublishedPostsByCat = async(cat) =>  {
 let addPost = (postData) => {
     console.log('Adding post...');
     return new Promise((resolve, reject) => {
-        if (postData.published == undefined)
-        {
-            postData.published = false;
-        } 
+        if (postData.published == undefined) postData.published = false;
         else postData.published = true;
 
         postData.id = posts.length + 1;
         posts.push(postData);
         console.log(`Post ${postData.id} has been added to posts`)
 
-        resolve(getPosts());
-
-        
+        resolve(getPosts());        
     })
 }
 

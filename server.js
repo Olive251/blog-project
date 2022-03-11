@@ -20,21 +20,16 @@ const streamifier = require("streamifier");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 
-
-//cloudinary settings
 cloudinary.config({ 
     cloud_name: 'dypd4xgsd', 
     api_key: '416493844922892', 
     api_secret: 'hyT9Ji0PUjM-adFdFg81rnQgUww' 
 });
 
-//multer settings
 const upload = multer(); //Disk storage not used
 
-//app using express
 const app = xps();
 
-//handlebars helpers
 const hbs = handlebars.create({
     extname: '.hbs',
     //custom helpers
@@ -60,7 +55,6 @@ const hbs = handlebars.create({
 app.engine('.hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', './views');
-
 
 const port = process.env.PORT || 8080;
 

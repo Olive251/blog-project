@@ -4,6 +4,8 @@ const blogSvc = require('../blog-service.js');
 const streamifier = require("streamifier");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
+const publicRouter = require("../routes/public.js");
+router.use('/public', publicRouter);
 
 //cloudinary
 cloudinary.config({ 

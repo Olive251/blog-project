@@ -23,6 +23,7 @@ const aboutRouter = require("./routes/about.js");
 const postsRouter = require("./routes/posts.js");
 const blogRouter = require("./routes/blog.js");
 const categoriesRouter = require("./routes/categories.js");
+const publicRouter = require("./routes/public.js");
 /**************************************************************************/
 //handlebars setup
 const hbs = handlebars.create({
@@ -104,10 +105,7 @@ app.use('/about', aboutRouter);
 app.use('/posts', postsRouter);
 app.use('/blog', blogRouter);
 app.use('/categories', categoriesRouter);
-
-app.get('/public/css/main.css', (req, res) =>{
-    res.send()
-})
+app.use('/public', publicRouter);
 
 //404 error handler
 app.use((req,res) => {

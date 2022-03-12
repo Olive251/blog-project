@@ -6,9 +6,9 @@ No part * of this assignment has been copied manually or electronically from any
 * 
 * Name: Olivia Brown Student ID: 112582192 Date: March 11, 2022
 *
-* Online (Heroku) URL: https://web322-assignment3-oliviabrown.herokuapp.com/
+* Online (Heroku) URL: https://web322-assignment4-oliviabrown.herokuapp.com/
 *
-* GitHub Repository URL: 
+* GitHub Repository URL: https://github.com/Olive251/web322-app/tree/assignment-4
 *           !!!(IN THE ASSIGNMENT-PART-4 BRANCH)!!!
 *
 ******************************************************************************/

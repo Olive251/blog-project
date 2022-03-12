@@ -12,27 +12,17 @@ No part * of this assignment has been copied manually or electronically from any
 *           !!!(IN THE ASSIGNMENT-5 BRANCH)!!!
 *
 ******************************************************************************/
+//INCLUDES
 const express = require("express");
 const handlebars = require('express-handlebars');
 const path = require("path");
 const bSvc = require("./blog-service.js");
-const streamifier = require("streamifier");
-const multer = require("multer");
-const cloudinary = require("cloudinary").v2;
 const stripJs = require('strip-js');
-//router includes
+//routers
 const aboutRouter = require("./routes/about.js");
 const postsRouter = require("./routes/posts.js");
 const blogRouter = require("./routes/blog.js");
-const addPostRouter = require("./routes/addPost.js");
-//cloudinary
-cloudinary.config({ 
-    cloud_name: 'dypd4xgsd', 
-    api_key: '416493844922892', 
-    api_secret: 'hyT9Ji0PUjM-adFdFg81rnQgUww' 
-})
-//multer setup
-const upload = multer(); //Disk storage not used
+/**************************************************************************/
 //handlebars setup
 const hbs = handlebars.create({
     extname: '.hbs',
@@ -74,9 +64,9 @@ app.use((req,res,next) => {
 
 const port = process.env.PORT || 8080;
 
+//storage for data
 const cFile = (path.join(__dirname, "data", "categories.json"));
 const pFile = (path.join(__dirname, "data", "posts.json"));
-
 
 //ROUTES
 //**********************************************/

@@ -1,18 +1,18 @@
 /*****************************************************************************
-* WEB322 – Assignment 03
+* WEB322 – Assignment 05
 * I declare that this assignment is my own work in accordance with Seneca Academic Policy. 
 No part * of this assignment has been copied manually or electronically from any other source 
 * (including 3rd party web sites) or distributed to other students.
 * 
 * Name: Olivia Brown Student ID: 112582192 Date: March 11, 2022
 *
-* Online (Heroku) URL: https://web322-assignment4-oliviabrown.herokuapp.com/
+* Online (Heroku) URL:
 *
-* GitHub Repository URL: https://github.com/Olive251/web322-app/tree/assignment-4
-*           !!!(IN THE ASSIGNMENT-PART-4 BRANCH)!!!
+* GitHub Repository URL: https://github.com/Olive251/web322-app/tree/assignment-5
+*           !!!(IN THE ASSIGNMENT-5 BRANCH)!!!
 *
 ******************************************************************************/
-const xps = require("express");
+const express = require("express");
 const handlebars = require('express-handlebars');
 const path = require("path");
 const bSvc = require("./blog-service.js");
@@ -20,17 +20,17 @@ const streamifier = require("streamifier");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const stripJs = require('strip-js');
-
+//router includes
+const aboutRouter = require("./routes/about.js");
+//cloudinary
 cloudinary.config({ 
     cloud_name: 'dypd4xgsd', 
     api_key: '416493844922892', 
     api_secret: 'hyT9Ji0PUjM-adFdFg81rnQgUww' 
 });
-
+//multer setup
 const upload = multer(); //Disk storage not used
-
-const app = xps();
-
+//handlebars setup
 const hbs = handlebars.create({
     extname: '.hbs',
     //custom helpers
@@ -55,16 +55,12 @@ const hbs = handlebars.create({
         }
     }
 })
-
+//express setup
+const app = express();
 app.engine('.hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', './views');
-
-const port = process.env.PORT || 8080;
-
-const cFile = (path.join(__dirname, "data", "categories.json"));
-const pFile = (path.join(__dirname, "data", "posts.json"));
-
+app.use(express.static('public'));
 //added per assignment instructions
 app.use((req,res,next) => {
     let route = req.path.substring(1);
@@ -72,7 +68,12 @@ app.use((req,res,next) => {
     app.locals.viewingCategory = req.query.category;
     next();
 })
-app.use(xps.static('public'));
+
+const port = process.env.PORT || 8080;
+
+const cFile = (path.join(__dirname, "data", "categories.json"));
+const pFile = (path.join(__dirname, "data", "posts.json"));
+
 
 //ROUTES
 //**********************************************/
@@ -105,9 +106,8 @@ app.get('/', async(req,res) => {
     res.render("blog", {data: viewData});
 })
 
-app.get('/about', (req,res) => {
-    res.render('about');
-})
+app.use('/about', aboutRouter);
+
 app.get('/posts/add', (req,res) => {
     res.render('addPost');
 })

@@ -203,14 +203,14 @@ let addPost = (postData) => {
         var mm = String(pDate.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = pDate.getFullYear();
 
-        postData.postDate = `${yyyy}/${mm}/${dd}`;
+        postData.postDate = `${yyyy}-${mm}-${dd}`;
         postData.id = posts.length + 1;
         posts.push(postData);
 
         if (postData.id > posts.length) reject("Error! Post not added!");
         else{
             console.log(`Post ${postData.id} has been added to posts`)
-            resolve(getPosts());  
+            resolve(posts);  
         }
     })
 }

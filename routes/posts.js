@@ -85,7 +85,8 @@ router.post('/add', upload.single("featureImage"), (req, res) => {
 router.get('/:postID', (req, res) => {
     blogSvc.getPostByID(req.params.postID)
     .then((data) => {
-        res.render('posts', {post: data});
+        viewData = [data,]
+        res.render('posts', {post: viewData});
     })
     .catch((err)=> {
         res.render('posts', {message: err});

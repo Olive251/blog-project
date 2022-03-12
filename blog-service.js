@@ -13,27 +13,10 @@ No part * of this assignment has been copied manually or electronically from any
 *
 ******************************************************************************/
 const fs = require("fs");
+const helpers = require('./helpers/blogSvc-helpers.js');
 
 let posts = [];
 let categories = [];
-
-//Each function needs to have error hadling
-
-let verifyArray = (array) =>
-{
-    let verification;
-    if (array.length < 1) verification = false;
-    else verification = true;
-
-    return verification;
-}
-
-let dateStrComp = (postDate, searchDate) =>
-{
-    let pDate = new Date(postDate);
-    let sDate = new Date(searchDate);
-    return (pDate >= sDate);
-}
 
 let initialize = (pFile, cFile) =>
 {
@@ -41,12 +24,10 @@ let initialize = (pFile, cFile) =>
         fs.promises.readFile(pFile, 'utf8')
         .then((data) => {
             posts = JSON.parse(data);
-            //console.log(`Posts has ${posts.length} records`);
             if (posts.length > 0){
                 fs.promises.readFile(cFile, 'utf8')
                 .then((data) => {
                     categories = JSON.parse(data);
-                    //console.log(`Categories has ${categories.length} records.`)
                     if(categories.length > 0)
                     {
                         resolve(`Initialization complete with ${posts.length} records in posts, and ${categories.length} records in categories`);
@@ -90,7 +71,7 @@ let getPosts = () =>
 let getPostsByCategory = (categoryID) => {
     return new Promise((resolve, reject) => {
         selection = [];
-        if (!verifyArray(posts))//(posts.length === 0)
+        if (!helpers.verifyArray(posts))//(posts.length === 0)
         { reject('No posts found')}
         else
         {
@@ -114,7 +95,7 @@ let getPostsByMinDate= (minDateStr) =>
 {
     return new Promise ((resolve, reject) => {
         selection = [];
-        if (!verifyArray(posts))
+        if (!helpers.verifyArray(posts))
         {
             reject('No posts found')
         }
@@ -122,9 +103,9 @@ let getPostsByMinDate= (minDateStr) =>
         {
             for (i=0;i<posts.length;i++)
             {
-                if (dateStrComp(posts[i].postDate, minDateStr))
+                if (helpers.dateStrComp(posts[i].postDate, minDateStr))
                 {
-                    console.log(dateStrComp(posts[i].postDate, minDateStr));
+                    console.log(helpers.dateStrComp(posts[i].postDate, minDateStr));
                     selection.push(posts[i]);
                 }
             }
@@ -139,7 +120,7 @@ let getPostByID = (searchID) =>
     return new Promise((resolve, reject) =>{
         let selection;
 
-        if (!verifyArray(posts))
+        if (!helpers.verifyArray(posts))
         {
             reject('Nothing found')
         }
@@ -149,7 +130,7 @@ let getPostByID = (searchID) =>
                 if (posts[i].id == searchID) selection = posts[i]
             }
             if (selection == undefined) reject(`No post found with ID "${searchID}"`);
-            else resolve(selection);
+            else console.log(selection); resolve(selection);
         }
     })
 }
@@ -158,7 +139,7 @@ let getPublishedPosts = () =>{
     return new Promise((resolve, reject) => {
         
         let published = [];
-        if (verifyArray(posts))
+        if (helpers.verifyArray(posts))
         {
             for (i=0;i<posts.length;i++)
             {

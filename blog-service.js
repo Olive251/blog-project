@@ -130,7 +130,7 @@ let getPostByID = (searchID) =>
                 if (posts[i].id == searchID) selection = posts[i]
             }
             if (selection == undefined) reject(`No post found with ID "${searchID}"`);
-            else console.log(selection); resolve(selection);
+            else resolve(selection);
         }
     })
 }

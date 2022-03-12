@@ -143,7 +143,8 @@ app.post('/posts/add', upload.single("featureImage"), (req, res) => {
         bSvc.addPost(req.body)
         .then(bSvc.getPosts()
             .then((data)=> {
-                res.send(data);
+                let address = (data.length) -1;
+                res.send(data[address]);
             }))            
         .catch(res.send)       
     })

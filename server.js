@@ -22,12 +22,15 @@ const cloudinary = require("cloudinary").v2;
 const stripJs = require('strip-js');
 //router includes
 const aboutRouter = require("./routes/about.js");
+const postsRouter = require("./routes/posts.js");
+const blogRouter = require("./routes/blog.js");
+const addPostRouter = require("./routes/addPost.js");
 //cloudinary
 cloudinary.config({ 
     cloud_name: 'dypd4xgsd', 
     api_key: '416493844922892', 
     api_secret: 'hyT9Ji0PUjM-adFdFg81rnQgUww' 
-});
+})
 //multer setup
 const upload = multer(); //Disk storage not used
 //handlebars setup
@@ -107,48 +110,12 @@ app.get('/', async(req,res) => {
 })
 
 app.use('/about', aboutRouter);
+app.use('/posts', postsRouter);
 
-app.get('/posts/add', (req,res) => {
-    res.render('addPost');
-})
 app.get('/public/css/main.css', (req, res) =>{
     res.send()
 })
-//post route for adding blog posts
-app.post('/posts/add', upload.single("featureImage"), (req, res) => {
-    
-    let streamUpload = (req) => {
-        return new Promise((resolve, reject) => {
-            let stream = cloudinary.uploader.upload_stream(
-                (error, result) => {
-                    if(result){
-                        console.log(result);
-                        resolve(result);
-                    } else {
-                        reject(error);
-                    }
-                }
-            );
-            streamifier.createReadStream(req.file.buffer).pipe(stream);
-        })
-    }
-    async function upload(req) {
-        let result = await streamUpload(req); 
-        return result; 
-    }
-    upload(req)
-    .then((uploaded) => {
-        req.body.featureImage = uploaded.url;
-    
-        bSvc.addPost(req.body)
-        .then(bSvc.getPosts()
-            .then((data)=> {
-                let address = (data.length) -1;
-                res.send(data[address]);
-            }))            
-        .catch(res.send)       
-    })
-})
+
 app.get('/blog', async(req,res) => {
     let viewData = {};
 
@@ -209,44 +176,6 @@ app.get('/blog/:id', async(req,res) =>  {
         viewData.categoriesMessage = "no results";
     }
     res.render("blog", {data: viewData});
-})
-//displays the contents of the posts array
-app.get('/posts', (req,res) => {    
-    if (req.query.category !== undefined)
-    {
-        bSvc.getPostsByCategory(req.query.category)
-        .then((data) => {
-            res.render('posts', {post: data});
-        })
-        .catch((message) => {
-            res.render('posts', {error: message});
-        })
-    } 
-    else if (req.query.minDate !== undefined)
-    {
-        console.log(`minDate search received: ${req.query.minDate}`);
-        bSvc.getPostsByMinDate(req.query.minDate)
-        .then((data) => {res.render('posts', {post: data});})
-        .catch((error) => {res.render('posts', {error: error});})
-    }
-    else {
-        bSvc.getPosts()
-    .then((data) => {
-            res.render('posts', {post: data} );
-    })
-    .catch((error) => {
-        res.render('posts', {message: error});
-    }) 
-    }       
-})
-app.get('/posts/:postID', (req, res) => {
-    bSvc.getPostByID(req.params.postID)
-    .then((data) => {
-        res.render('posts', {post: data});
-    })
-    .catch((err)=> {
-        res.render('posts', {message: err});
-    })
 })
 //displays the contents of the categories array
 app.get('/categories',  (req,res) => {

@@ -1,0 +1,66 @@
+const express = require('express');
+const router = express.Router();
+const bSvc = require('../blog-service.js');
+
+router.get('/', async(req,res) => {
+    let viewData = {};
+
+    try{
+        let posts = [];
+        //checking for category query
+        if(req.query.ccategory) posts = await bSvc.getPublishedPostsByCat(req.query.category);
+        else posts = await bSvc.getPublishedPosts();
+        //sorting posts by date
+        posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate));
+        //get latest post
+        let post = posts[0];
+        //storing post(s) to be passed to the view
+        viewData.posts = posts;
+        viewData.post = post;
+    }
+    catch(err) {viewData.message="no results";}
+
+    try{
+        let categories = await bSvc.getCategories();
+
+        //store categories in viewData
+        viewData.categories = categories;
+    }
+    catch(err){viewData.categoriesMessage = "no results";}
+
+    res.render("blog", {data: viewData});
+})
+router.get('/:id', async(req,res) =>  {
+    let viewData = {};
+
+    try{
+        let posts = [];
+
+        if(req.query.category) posts = await bSvc.getPublishedPostsByCat(req.query.cateogy);
+        else posts = await bSvc.getPublishedPosts();
+
+        posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate))
+        viewData.posts=posts;
+    }
+    catch(err){
+        viewData.message="no results";
+    }
+    //getting post by id
+    try{
+        viewData.post = await bSvc.getPostByID(req.params.id);
+    }
+    catch(err){
+        viewData.message = "no results";
+    }
+    //getting category list
+    try{
+        let categories = await blogData.getCategories();
+        viewData.categories = categories;
+    }
+    catch(err){
+        viewData.categoriesMessage = "no results";
+    }
+    res.render("blog", {data: viewData});
+})
+
+module.exports = router;

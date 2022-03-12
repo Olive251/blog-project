@@ -22,6 +22,7 @@ const stripJs = require('strip-js');
 const aboutRouter = require("./routes/about.js");
 const postsRouter = require("./routes/posts.js");
 const blogRouter = require("./routes/blog.js");
+const categoriesRouter = require("./routes/categories.js");
 /**************************************************************************/
 //handlebars setup
 const hbs = handlebars.create({
@@ -101,82 +102,13 @@ app.get('/', async(req,res) => {
 
 app.use('/about', aboutRouter);
 app.use('/posts', postsRouter);
+app.use('/blog', blogRouter);
+app.use('/categories', categoriesRouter);
 
 app.get('/public/css/main.css', (req, res) =>{
     res.send()
 })
 
-app.get('/blog', async(req,res) => {
-    let viewData = {};
-
-    try{
-        let posts = [];
-        //checking for category query
-        if(req.query.ccategory) posts = await bSvc.getPublishedPostsByCat(req.query.category);
-        else posts = await bSvc.getPublishedPosts();
-        //sorting posts by date
-        posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate));
-        //get latest post
-        let post = posts[0];
-        //storing post(s) to be passed to the view
-        viewData.posts = posts;
-        viewData.post = post;
-    }
-    catch(err) {viewData.message="no results";}
-
-    try{
-        let categories = await bSvc.getCategories();
-
-        //store categories in viewData
-        viewData.categories = categories;
-    }
-    catch(err){viewData.categoriesMessage = "no results";}
-
-    res.render("blog", {data: viewData});
-})
-
-app.get('/blog/:id', async(req,res) =>  {
-    let viewData = {};
-
-    try{
-        let posts = [];
-
-        if(req.query.category) posts = await bSvc.getPublishedPostsByCat(req.query.cateogy);
-        else posts = await bSvc.getPublishedPosts();
-
-        posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate))
-        viewData.posts=posts;
-    }
-    catch(err){
-        viewData.message="no results";
-    }
-    //getting post by id
-    try{
-        viewData.post = await bSvc.getPostByID(req.params.id);
-    }
-    catch(err){
-        viewData.message = "no results";
-    }
-    //getting category list
-    try{
-        let categories = await blogData.getCategories();
-        viewData.categories = categories;
-    }
-    catch(err){
-        viewData.categoriesMessage = "no results";
-    }
-    res.render("blog", {data: viewData});
-})
-//displays the contents of the categories array
-app.get('/categories',  (req,res) => {
-    bSvc.getCategories()
-    .then((data) => {
-        res.render('categories', {category: data});
-    })
-    .catch((error) =>{
-        res.render('categories', {message: error});
-    })
-})
 //404 error handler
 app.use((req,res) => {
     res.status(404).render('404');

@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const bSvc = require('../blog-service.js');
+const blogSvc = require('../blog-service.js');
 
 router.get('/',  (req,res) => {
-    bSvc.getCategories()
+    blogSvc.getCategories()
     .then((data) => {
         res.render('categories', {category: data});
     })

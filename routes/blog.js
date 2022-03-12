@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bSvc = require('../blog-service.js');
+const blogSvc = require('../blog-service.js');
 
 router.get('/', async(req,res) => {
     let viewData = {};
@@ -8,8 +8,8 @@ router.get('/', async(req,res) => {
     try{
         let posts = [];
         //checking for category query
-        if(req.query.ccategory) posts = await bSvc.getPublishedPostsByCat(req.query.category);
-        else posts = await bSvc.getPublishedPosts();
+        if(req.query.ccategory) posts = await blogSvc.getPublishedPostsByCat(req.query.category);
+        else posts = await blogSvc.getPublishedPosts();
         //sorting posts by date
         posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate));
         //get latest post
@@ -21,7 +21,7 @@ router.get('/', async(req,res) => {
     catch(err) {viewData.message="no results";}
 
     try{
-        let categories = await bSvc.getCategories();
+        let categories = await blogSvc.getCategories();
 
         //store categories in viewData
         viewData.categories = categories;
@@ -36,8 +36,8 @@ router.get('/:id', async(req,res) =>  {
     try{
         let posts = [];
 
-        if(req.query.category) posts = await bSvc.getPublishedPostsByCat(req.query.cateogy);
-        else posts = await bSvc.getPublishedPosts();
+        if(req.query.category) posts = await blogSvc.getPublishedPostsByCat(req.query.cateogy);
+        else posts = await blogSvc.getPublishedPosts();
 
         posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate))
         viewData.posts=posts;
@@ -47,7 +47,7 @@ router.get('/:id', async(req,res) =>  {
     }
     //getting post by id
     try{
-        viewData.post = await bSvc.getPostByID(req.params.id);
+        viewData.post = await blogSvc.getPostByID(req.params.id);
     }
     catch(err){
         viewData.message = "no results";

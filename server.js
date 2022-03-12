@@ -16,7 +16,7 @@ No part * of this assignment has been copied manually or electronically from any
 const express = require("express");
 const handlebars = require('express-handlebars');
 const path = require("path");
-const bSvc = require("./blog-service.js");
+const blogSvc = require("./blog-service.js");
 const stripJs = require('strip-js');
 //routers
 const aboutRouter = require("./routes/about.js");
@@ -77,8 +77,8 @@ app.get('/', async(req,res) => {
     try{
         let posts = [];
         //checking for category query
-        if(req.query.ccategory) posts = await bSvc.getPublishedPostsByCat(req.query.category);
-        else posts = await bSvc.getPublishedPosts();
+        if(req.query.ccategory) posts = await blogSvc.getPublishedPostsByCat(req.query.category);
+        else posts = await blogSvc.getPublishedPosts();
         //sorting posts by date
         posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate));
         //get latest post
@@ -90,7 +90,7 @@ app.get('/', async(req,res) => {
     catch(err) {viewData.message="no results";}
 
     try{
-        let categories = await bSvc.getCategories();
+        let categories = await blogSvc.getCategories();
 
         //store categories in viewData
         viewData.categories = categories;
@@ -115,7 +115,7 @@ app.use((req,res) => {
     
 })
 //initializes posts and categories arrays before activating server
-bSvc.initialize(pFile, cFile)
+blogSvc.initialize(pFile, cFile)
 .then((message) => {
     console.log(message);
     app.listen(port, () =>{

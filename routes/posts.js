@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bSvc = require('../blog-service.js');
+const blogSvc = require('../blog-service.js');
 const streamifier = require("streamifier");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
@@ -18,7 +18,7 @@ const upload = multer(); //Disk storage not used
 router.get('/', (req,res) => {    
     if (req.query.category !== undefined)
     {
-        bSvc.getPostsByCategory(req.query.category)
+        blogSvc.getPostsByCategory(req.query.category)
         .then((data) => {
             res.render('posts', {post: data});
         })
@@ -29,12 +29,12 @@ router.get('/', (req,res) => {
     else if (req.query.minDate !== undefined)
     {
         console.log(`minDate search received: ${req.query.minDate}`);
-        bSvc.getPostsByMinDate(req.query.minDate)
+        blogSvc.getPostsByMinDate(req.query.minDate)
         .then((data) => {res.render('posts', {post: data});})
         .catch((error) => {res.render('posts', {error: error});})
     }
     else {
-        bSvc.getPosts()
+        blogSvc.getPosts()
     .then((data) => {
             res.render('posts', {post: data} );
     })
@@ -72,8 +72,8 @@ router.post('/add', upload.single("featureImage"), (req, res) => {
     .then((uploaded) => {
         req.body.featureImage = uploaded.url;
     
-        bSvc.addPost(req.body)
-        .then(bSvc.getPosts()
+        blogSvc.addPost(req.body)
+        .then(blogSvc.getPosts()
             .then((data)=> {
                 let address = (data.length) -1;
                 res.send(data[address]);
@@ -83,7 +83,7 @@ router.post('/add', upload.single("featureImage"), (req, res) => {
 })
 //variable
 router.get('/:postID', (req, res) => {
-    bSvc.getPostByID(req.params.postID)
+    blogSvc.getPostByID(req.params.postID)
     .then((data) => {
         res.render('posts', {post: data});
     })

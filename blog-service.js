@@ -75,12 +75,11 @@ let getPostsByCategory = (categoryID) => {
         { reject('No posts found')}
         else
         {
-            for (i=0;i<posts.length;i++)
+            posts.forEach(post => 
             {
-                if (posts[i].category == categoryID) {
-                    selection.push(posts[i]);
-                }
-            }
+                if (post.category == categoryID)    selection.push(post);
+            })
+               
             if (selection.length < 1){
                 reject(`No posts found in categoryID "${categoryID}"`);
             }
@@ -95,20 +94,13 @@ let getPostsByMinDate= (minDateStr) =>
 {
     return new Promise ((resolve, reject) => {
         selection = [];
-        if (!helpers.verifyArray(posts))
-        {
-            reject('No posts found')
-        }
+        if (!helpers.verifyArray(posts))    reject('No posts found')
         else 
         {
-            for (i=0;i<posts.length;i++)
+            posts.forEach(post => 
             {
-                if (helpers.dateStrComp(posts[i].postDate, minDateStr))
-                {
-                    console.log(helpers.dateStrComp(posts[i].postDate, minDateStr));
-                    selection.push(posts[i]);
-                }
-            }
+                if(helpers.dateStrComp(post.postDate, minDateStr))  selection.push(post);
+            })
             if (selection.length < 1) reject(`No posts found after ${minDateStr}`)
             else resolve(selection);
         }
@@ -125,10 +117,9 @@ let getPostByID = (searchID) =>
             reject('Nothing found')
         }
         else {
-            for (i=0;i<posts.length;i++)
-            {
-                if (posts[i].id == searchID) selection = posts[i]
-            }
+            posts.forEach(post => {
+                if (post.id == searchID) selection = post;
+            })
             if (selection == undefined) reject(`No post found with ID "${searchID}"`);
             else resolve(selection);
         }
@@ -141,13 +132,9 @@ let getPublishedPosts = () =>{
         let published = [];
         if (helpers.verifyArray(posts))
         {
-            for (i=0;i<posts.length;i++)
-            {
-                if (posts[i].published === true)
-                {
-                    published.push(posts[i]);
-                }
-            }
+            posts.forEach(post => {
+                if (post.published === true) published.push(post);
+            })
             if (!published.length <=0)
             {
                 resolve(published);

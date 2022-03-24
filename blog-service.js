@@ -14,6 +14,17 @@ No part * of this assignment has been copied manually or electronically from any
 ******************************************************************************/
 const fs = require("fs");
 const helpers = require('./helpers/blogSvc-helpers.js');
+const Sequelize = require('sequelize');
+var sequelize = new Sequelize('d2i1s7q7ks7ps0', 'ykaoydftxgedxx', '7a0ec7447c58b452373ba7f627e9a0fdf7bcf607effa4e054fd2c919c0687288', 
+{
+    host: 'ec2-3-231-254-204.compute-1.amazonaws.com', 
+    dialect: 'postgres', 
+    port: 5432, 
+    dialectOptions: {
+        ssl: { rejectUnauthorized: false } 
+    },
+    query: { raw: true }
+});
 
 let posts = [];
 let categories = [];

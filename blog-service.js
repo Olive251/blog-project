@@ -16,6 +16,7 @@ const fs = require("fs");
 const helpers = require('./helpers/blogSvc-helpers.js');
 const Sequelize = require('sequelize');
 const {Op} = require('@sequelize/core');
+const { post } = require("./routes/public.js");
 var sequelize = new Sequelize('d2i1s7q7ks7ps0', 'ykaoydftxgedxx', '7a0ec7447c58b452373ba7f627e9a0fdf7bcf607effa4e054fd2c919c0687288', 
 {
     host: 'ec2-3-231-254-204.compute-1.amazonaws.com', 
@@ -51,12 +52,16 @@ var Post = sequelize.define('post', {
 });
 
 var Category = sequelize.define('category', {
+    category_id: {
+        type: Sequelize.INTEGER,
+        primaryKey:true
+    },
     category: {
         type: Sequelize.STRING
     }
 });
 
-Post.belongsTo(Category, {foreignKey: 'category'});
+Post.belongsTo(Category, {foreignKey: 'category_id'});
 
 /*==========- Exports -==========*/
 module.exports.initialize = async() => {
@@ -134,14 +139,23 @@ module.exports.getPostsByMinDate = async(searchId) =>
         }
     })
 }
-module.exports.addPost = async() =>
+module.exports.addPost = async(postData) =>
 {
     return new Promise((resolve, reject) => {
         try{
-            
+            postData.published = (postData.published)? true : false;
+            Post.create({
+                title: postData.title,
+                body: postData.body,
+                postData: new Date(),
+                feature_img: postData.featureImage,
+                published: postData.published,
+                category_id: postData.category
+            })
+            resolve(`"${postData.title}" saved`);    
         }
         catch{
-
+            reject(`Unable save "${postData.title}"`);
         }
     })
 }

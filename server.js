@@ -28,7 +28,7 @@ const publicRouter = require("./routes/public.js");
 //handlebars setup
 const hbs = handlebars.create({
     extname: '.hbs',
-    //custom helpers
+    //handlebars custom helpers
     helpers: {
         navLink: (url, options) => {
             return'<li' +
@@ -47,6 +47,13 @@ const hbs = handlebars.create({
         },
         safeHTML: (context) => {
             return stripJs(context);
+        },
+        formatDate: function(dateObj)
+        {
+            let year = datObj.getFullYear();
+            let month = (dateObj.getMonth() + 1).toString();
+            let day = dateObj.getDate().toString();
+            return`${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;
         }
     }
 })

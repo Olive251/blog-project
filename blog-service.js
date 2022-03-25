@@ -15,6 +15,7 @@ No part * of this assignment has been copied manually or electronically from any
 const fs = require("fs");
 const helpers = require('./helpers/blogSvc-helpers.js');
 const Sequelize = require('sequelize');
+const {Op} = require('@sequelize/core');
 var sequelize = new Sequelize('d2i1s7q7ks7ps0', 'ykaoydftxgedxx', '7a0ec7447c58b452373ba7f627e9a0fdf7bcf607effa4e054fd2c919c0687288', 
 {
     host: 'ec2-3-231-254-204.compute-1.amazonaws.com', 
@@ -26,179 +27,121 @@ var sequelize = new Sequelize('d2i1s7q7ks7ps0', 'ykaoydftxgedxx', '7a0ec7447c58b
     query: { raw: true }
 });
 
-let posts = [];
-let categories = [];
+var Post = sequelize.define('post', {
+    post_id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    body: {
+        type: Sequelize.TEXT
+    },
+    title: {
+        type: Sequelize.STRING
+    },
+    post_date: {
+        type: Sequelize.DATE
+    },
+    feature_img: {
+        type: Sequelize.STRING
+    },
+    published: {
+        type: Sequelize.BOOLEAN
+    }
+});
 
-let initialize = (pFile, cFile) =>
-{
+var Category = sequelize.define('category', {
+    category: {
+        type: Sequelize.STRING
+    }
+});
+
+Post.belongsTo(Category, {foreignKey: 'category'});
+
+/*==========- Exports -==========*/
+module.exports.initialize = async() => {
     return new Promise((resolve, reject) => {
-        fs.promises.readFile(pFile, 'utf8')
-        .then((data) => {
-            posts = JSON.parse(data);
-            if (posts.length > 0){
-                fs.promises.readFile(cFile, 'utf8')
-                .then((data) => {
-                    categories = JSON.parse(data);
-                    if(categories.length > 0)
-                    {
-                        resolve(`Initialization complete with ${posts.length} records in posts, and ${categories.length} records in categories`);
-                    } else {
-                        reject(`Initialization failed. No data found.`);
-                    }
-                })
-                .catch((err) => {
-                    reject(`Initialization failed!\n${err}`);
-                })
-            } else{
-                reject(`Initialization failed! No data found.`);
-            }
-        })
-        .catch((err) => {
-            reject(`Initialization failed!\n${err}`);
-        })
+        try{
+            await sequelize.sync({});
+            resolve('Database synced');
+        }
+        catch{
+            reject('Database failed to sync');
+        }
+    })
+};
+module.exports.getAllPosts = async() => {
+    return new Promise((resolve, reject) =>
+    {
+        try{
+            let posts = await Post.findAll()
+            resolve(posts);
+        }
+        catch{
+            reject('Unable to retrieve posts');
+        }
     })
 }
-
-let getCategories = () =>
-{
-    return new Promise((resolve, reject) => {
-        if (categories.length === 0)
-        {
-            reject('No data found in categories')
-        } 
-        else {resolve(categories)}
-    })
-}
-
-let getPosts = () =>
-{
-    return new Promise((resolve, reject) => {
-        if (posts.length === 0)
-        {reject('No posts found')}
-        else {resolve(posts)}
-    })
-}
-
-let getPostsByCategory = (categoryID) => {
-    return new Promise((resolve, reject) => {
-        selection = [];
-        if (!helpers.verifyArray(posts))//(posts.length === 0)
-        { reject('No posts found')}
-        else
-        {
-            posts.forEach(post => 
-            {
-                if (post.category == categoryID)    selection.push(post);
+module.exports.getPostsByCategory = async (searchCategory) => {
+    return new Promise((resolve, reject) =>
+    {
+        try{
+            let posts = await Post.findAll({
+                where: {
+                    category: searchCategory
+                }
             })
-               
-            if (selection.length < 1){
-                reject(`No posts found in categoryID "${categoryID}"`);
-            }
-            else {
-                resolve(selection);
-            }
+            if (posts.length < 1) reject(`No posts in ${searchCategory}`)
+            else resolve(posts);
+        }
+        catch{
+            reject(`There was a problem locating posts in the "${searchCategory}" category`);
         }
     })
 }
-
-let getPostsByMinDate= (minDateStr) => 
+module.exports.getPostsByMinDate = async(minDateString) =>
 {
-    return new Promise ((resolve, reject) => {
-        selection = [];
-        if (!helpers.verifyArray(posts))    reject('No posts found')
-        else 
-        {
-            posts.forEach(post => 
-            {
-                if(helpers.dateStrComp(post.postDate, minDateStr))  selection.push(post);
+    return new Promise((resolve, reject) => 
+    {
+        try{
+            let posts = await Post.findAll({
+                where: {
+                    postDate: {[Op.gte]: new Date(minDateString)}
+                }
             })
-            if (selection.length < 1) reject(`No posts found after ${minDateStr}`)
-            else resolve(selection);
+            if (posts.length < 1) reject(`No posts made on or after ${minDateString}`);
+            else resolve(posts);
+        }
+        catch {
+            reject(`There was a problem locating posts made on or after ${minDateString}`);
         }
     })
 }
-
-let getPostByID = (searchID) => 
+module.exports.getPostsByMinDate = async(searchId) => 
 {
-    return new Promise((resolve, reject) =>{
-        let selection;
-
-        if (!helpers.verifyArray(posts))
-        {
-            reject('Nothing found')
-        }
-        else {
-            posts.forEach(post => {
-                if (post.id == searchID) selection = post;
+    return new Promise((resolve, reject) =>
+    {
+        try{
+            let post = await Post.findAll({
+                where: {
+                    post_id: searchId
+                }
             })
-            if (selection == undefined) reject(`No post found with ID "${searchID}"`);
-            else resolve(selection);
+            resolve(post);
+        }
+        catch{
+            reject(`Unable to find post with ID "${searchId}"`);
         }
     })
 }
-
-let getPublishedPosts = () =>{
+module.exports.addPost = async() =>
+{
     return new Promise((resolve, reject) => {
-        
-        let published = [];
-        if (helpers.verifyArray(posts))
-        {
-            posts.forEach(post => {
-                if (post.published === true) published.push(post);
-            })
-            if (!published.length <=0)
-            {
-                resolve(published);
-            } else 
-            {reject("No published posts found")}
-        } else 
-        {reject('No data found in posts')}
-    })
-}
-
-let getPublishedPostsByCat = async(cat) =>  {
-    let selection = [];
-    let published = await getPublishedPosts();
-    if (typeof(published) == "string") return published;
-
-    published.forEach(post => {
-        if (post.category === cat)    {
-            selection.push(post);
+        try{
+            
         }
-    })
-    return selection;
-}
+        catch{
 
-let addPost = (postData) => {
-    console.log('Adding post...');
-    return new Promise((resolve, reject) => {
-        if (postData.published == undefined) postData.published = false;
-        else postData.published = true;
-
-        //prepping date
-        pDate = new Date();
-        var dd = String(pDate.getDate()).padStart(2, '0');
-        var mm = String(pDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = pDate.getFullYear();
-
-        postData.postDate = `${yyyy}-${mm}-${dd}`;
-        postData.id = posts.length + 1;
-        posts.push(postData);
-
-        if (postData.id > posts.length) reject("Error! Post not added!");
-        else{
-            console.log(`Post ${postData.id} has been added to posts`)
-            resolve(posts);  
         }
     })
 }
-
-exports.getPostByID = getPostByID;
-exports.getPostsByMinDate = getPostsByMinDate
-exports.getPostsByCategory = getPostsByCategory;
-exports.initialize = initialize;
-exports.getPosts = getPosts;
-exports.getPublishedPosts = getPublishedPosts;
-exports.getPublishedPostsByCat = getPublishedPostsByCat;
-exports.getCategories = getCategories;
-exports.addPost = addPost;

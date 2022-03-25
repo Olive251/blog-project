@@ -139,6 +139,41 @@ module.exports.getPostsByMinDate = async(searchId) =>
         }
     })
 }
+module.exports.getPublishedPosts = async() =>
+{
+    return new Promise((resolve,reject) => {
+        try{
+            let posts = await Post.findAll({
+                where: {
+                    published: true
+                }
+            })
+            resolve(posts);
+        }
+        catch{
+            reject('Unable to load published posts')
+        }
+    })
+}
+module.exports.getPublishedPostsByCategory = async(searchCategory) => 
+{
+    return new Promise((resolve,reject) => {
+        try{
+            let published = [];
+            let posts = getPublishedPosts();
+            posts.forEach(post => {
+                if(post.published)
+                {
+                    published.push(post);
+                }
+            })
+            resolve(published);
+        }
+        catch{
+            reject(`Unable to retrieve published posts in category ${searchCategory}`);
+        }
+    })
+}
 module.exports.addPost = async(postData) =>
 {
     return new Promise((resolve, reject) => {

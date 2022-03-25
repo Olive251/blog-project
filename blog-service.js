@@ -194,3 +194,15 @@ module.exports.addPost = async(postData) =>
         }
     })
 }
+module.exports.getCategories = async() => 
+{
+    return new Promise((resolve, reject) => {
+        try {
+            let categories = Category.findAll();
+            resolve(categories);
+        }
+        catch {
+            reject('Unable to load categories');
+        }
+    })
+}

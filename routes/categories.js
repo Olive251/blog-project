@@ -16,5 +16,16 @@ router.get('/',  (req,res) => {
 router.get('/add', (req,res) => {
     res.render('addCategory');
 })
+router.post('/add', (req,res)=> {
+    blogSvc.addCategory(req.body)
+    .then(
+        blogSvc.getCategories()
+        .then((data) => {
+            res.render('categories', {message: "Unable to load categories"});
+        })
+        .catch((error) =>{
+            res.render('categories', {message: error});
+    })) 
+})
 
 module.exports = router;

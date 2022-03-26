@@ -76,18 +76,17 @@ router.post('/add', upload.single("featureImage"), (req, res) => {
     
         blogSvc.addPost(req.body)
         .then(blogSvc.getPosts()
-            .then((data)=> {
-                let address = (data.length) -1;
-                res.send(data[address]);
+            .then(()=> {
+                res.render('blog', {message: "No post found"});
             }))            
-        .catch(res.send)       
+        .catch(res.send);      
     })
 })
 //variable
 router.get('/:postID', (req, res) => {
     blogSvc.getPostByID(req.params.postID)
-    .then((data) => {
-        viewData = [data,]
+    .then(() => {
+        //viewData = [data,]
         res.render('posts', {message: 'no posts found'});//{post: viewData});
     })
     .catch((err)=> {

@@ -27,11 +27,6 @@ var sequelize = new Sequelize('d2i1s7q7ks7ps0', 'ykaoydftxgedxx', '7a0ec7447c58b
     query: { raw: true }
 });
 var Post = sequelize.define('post', {
-    post_id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
     body: {
         type: Sequelize.TEXT
     },
@@ -49,16 +44,11 @@ var Post = sequelize.define('post', {
     }
 });
 var Category = sequelize.define('category', {
-    category_id: {
-        type: Sequelize.INTEGER,
-        primaryKey:true,
-        autoIncrement:true
-    },
-    category: {
+    category_name: {
         type: Sequelize.STRING
     }
 });
-Post.belongsTo(Category, {foreignKey: 'category_id'});
+Post.belongsTo(Category, {foreignKey: 'category_name'});
 
 /*==========- Exports -==========*/
 module.exports.initialize = () => {
@@ -189,7 +179,7 @@ module.exports.addPost = (postData) =>
                 postData: new Date(),
                 feature_img: postData.featureImage,
                 published: postData.published,
-                category_id: postData.category
+                category: postData.category
             })
             
             resolve(`"${postData.title}" saved`);    
@@ -211,7 +201,7 @@ module.exports.addCategory = (categoryData) =>
                 }
             }
             Category.create({
-                category: categoryData
+                category: categoryData.category
             })
             resolve(categoryData);
         }

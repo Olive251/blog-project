@@ -6,7 +6,7 @@ No part * of this assignment has been copied manually or electronically from any
 * 
 * Name: Olivia Brown Student ID: 112582192 Date: March 11, 2022
 *
-* Online (Heroku) URL:
+* Online (Heroku) URL: https://web322-assignment5-obrown.herokuapp.com
 *
 * GitHub Repository URL: https://github.com/Olive251/web322-app/tree/assignment-5
 *           !!!(IN THE ASSIGNMENT-5 BRANCH)!!!
@@ -63,6 +63,7 @@ app.engine('.hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', './views');
 app.use(express.static('public'));
+app.use(express.urlencoded({extended: true}));
 //added per assignment instructions
 app.use((req,res,next) => {
     let route = req.path.substring(1);

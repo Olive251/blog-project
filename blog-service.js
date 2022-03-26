@@ -6,11 +6,10 @@ No part * of this assignment has been copied manually or electronically from any
 * 
 * Name: Olivia Brown Student ID: 112582192 Date: March 11, 2022
 *
-* Online (Heroku) URL:
+* Online (Heroku) URL: https://web322-assignment5-obrown.herokuapp.com
 *
 * GitHub Repository URL: https://github.com/Olive251/web322-app/tree/assignment-5
 *           !!!(IN THE ASSIGNMENT-5 BRANCH)!!!
-*
 ******************************************************************************/
 const fs = require("fs");
 const helpers = require('./helpers/blogSvc-helpers.js');
@@ -27,7 +26,6 @@ var sequelize = new Sequelize('d2i1s7q7ks7ps0', 'ykaoydftxgedxx', '7a0ec7447c58b
     },
     query: { raw: true }
 });
-
 var Post = sequelize.define('post', {
     post_id: {
         type: Sequelize.INTEGER,
@@ -50,17 +48,16 @@ var Post = sequelize.define('post', {
         type: Sequelize.BOOLEAN
     }
 });
-
 var Category = sequelize.define('category', {
     category_id: {
         type: Sequelize.INTEGER,
-        primaryKey:true
+        primaryKey:true,
+        autoIncrement:true
     },
     category: {
         type: Sequelize.STRING
     }
 });
-
 Post.belongsTo(Category, {foreignKey: 'category_id'});
 
 /*==========- Exports -==========*/
@@ -179,6 +176,13 @@ module.exports.addPost = (postData) =>
     return new Promise((resolve, reject) => {
         try{
             postData.published = (postData.published)? true : false;
+            for(property in postData)
+            {
+                if (typeof(property) == "string" && property.length < 1)
+                {
+                    property = null;
+                }
+            }
             Post.create({
                 title: postData.title,
                 body: postData.body,
@@ -187,10 +191,32 @@ module.exports.addPost = (postData) =>
                 published: postData.published,
                 category_id: postData.category
             })
+            
             resolve(`"${postData.title}" saved`);    
         }
         catch{
             reject(`Unable save "${postData.title}"`);
+        }
+    })
+}
+module.exports.addCategory = (categoryData) =>
+{
+    return new Promise((resolve,reject) => {
+        try{
+            for(property in categoryData)
+            {
+                if (typeof(property) == "string" && property.length < 1)
+                {
+                    property = null;
+                }
+            }
+            Category.create({
+                category: categoryData
+            })
+            resolve(categoryData);
+        }
+        catch {
+            reject("Unable to add category");
         }
     })
 }

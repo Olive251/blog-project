@@ -2,7 +2,8 @@
     <div class="col-md-12">
         <h2>Categories</h2>
         <hr/>
-        {#unless category}}
+        <a href="/categories/add" class="btn btn-success pull-right">Add Category</a>
+        {{#unless category}}
             <div class="col-md-12 text-center">
                 <strong>{{message}}</strong>
             </div>

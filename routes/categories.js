@@ -7,11 +7,14 @@ router.use('/public', publicRouter);
 router.get('/',  (req,res) => {
     blogSvc.getCategories()
     .then((data) => {
-        res.render('categories', {category: data});
+        res.render('categories', {message: "Unable to load categories"});
     })
     .catch((error) =>{
         res.render('categories', {message: error});
     })
+})
+router.get('/add', (req,res) => {
+    res.render('addCategory');
 })
 
 module.exports = router;

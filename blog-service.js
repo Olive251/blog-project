@@ -6,15 +6,16 @@ No part * of this assignment has been copied manually or electronically from any
 * 
 * Name: Olivia Brown Student ID: 112582192 Date: March 11, 2022
 *
-* Online (Heroku) URL:
+* Online (Heroku) URL: https://web322-assignment5-obrown.herokuapp.com
 *
 * GitHub Repository URL: https://github.com/Olive251/web322-app/tree/assignment-5
 *           !!!(IN THE ASSIGNMENT-5 BRANCH)!!!
-*
 ******************************************************************************/
 const fs = require("fs");
 const helpers = require('./helpers/blogSvc-helpers.js');
 const Sequelize = require('sequelize');
+const {Op} = require('@sequelize/core');
+const { post } = require("./routes/public.js");
 var sequelize = new Sequelize('d2i1s7q7ks7ps0', 'ykaoydftxgedxx', '7a0ec7447c58b452373ba7f627e9a0fdf7bcf607effa4e054fd2c919c0687288', 
 {
     host: 'ec2-3-231-254-204.compute-1.amazonaws.com', 
@@ -25,180 +26,199 @@ var sequelize = new Sequelize('d2i1s7q7ks7ps0', 'ykaoydftxgedxx', '7a0ec7447c58b
     },
     query: { raw: true }
 });
+var Post = sequelize.define('post', {
+    body: {
+        type: Sequelize.TEXT
+    },
+    title: {
+        type: Sequelize.STRING
+    },
+    post_date: {
+        type: Sequelize.DATE
+    },
+    feature_img: {
+        type: Sequelize.STRING
+    },
+    published: {
+        type: Sequelize.BOOLEAN
+    }
+});
+var Category = sequelize.define('category', {
+    category_name: {
+        type: Sequelize.STRING
+    }
+});
+Post.belongsTo(Category, {foreignKey: 'category_name'});
 
-let posts = [];
-let categories = [];
-
-let initialize = (pFile, cFile) =>
-{
+/*==========- Exports -==========*/
+module.exports.initialize = () => {
     return new Promise((resolve, reject) => {
-        fs.promises.readFile(pFile, 'utf8')
-        .then((data) => {
-            posts = JSON.parse(data);
-            if (posts.length > 0){
-                fs.promises.readFile(cFile, 'utf8')
-                .then((data) => {
-                    categories = JSON.parse(data);
-                    if(categories.length > 0)
-                    {
-                        resolve(`Initialization complete with ${posts.length} records in posts, and ${categories.length} records in categories`);
-                    } else {
-                        reject(`Initialization failed. No data found.`);
-                    }
-                })
-                .catch((err) => {
-                    reject(`Initialization failed!\n${err}`);
-                })
-            } else{
-                reject(`Initialization failed! No data found.`);
-            }
-        })
-        .catch((err) => {
-            reject(`Initialization failed!\n${err}`);
-        })
+        try{
+            sequelize.sync({});
+            resolve('Database synced');
+        }
+        catch{
+            reject('Database failed to sync');
+        }
+    })
+};
+module.exports.getPosts = () => {
+    return new Promise((resolve, reject) =>
+    {
+        try{
+            let posts = Post.findAll()
+            resolve(posts);
+        }
+        catch{
+            reject('Unable to retrieve posts');
+        }
     })
 }
-
-let getCategories = () =>
-{
-    return new Promise((resolve, reject) => {
-        if (categories.length === 0)
-        {
-            reject('No data found in categories')
-        } 
-        else {resolve(categories)}
-    })
-}
-
-let getPosts = () =>
-{
-    return new Promise((resolve, reject) => {
-        if (posts.length === 0)
-        {reject('No posts found')}
-        else {resolve(posts)}
-    })
-}
-
-let getPostsByCategory = (categoryID) => {
-    return new Promise((resolve, reject) => {
-        selection = [];
-        if (!helpers.verifyArray(posts))//(posts.length === 0)
-        { reject('No posts found')}
-        else
-        {
-            posts.forEach(post => 
-            {
-                if (post.category == categoryID)    selection.push(post);
+module.exports.getPostsByCategory = (searchCategory) => {
+    return new Promise((resolve, reject) =>
+    {
+        try{
+            let posts = Post.findAll({
+                where: {
+                    category: searchCategory
+                }
             })
-               
-            if (selection.length < 1){
-                reject(`No posts found in categoryID "${categoryID}"`);
-            }
-            else {
-                resolve(selection);
-            }
+            if (posts.length < 1) reject(`No posts in ${searchCategory}`)
+            else resolve(posts);
+        }
+        catch{
+            reject(`There was a problem locating posts in the "${searchCategory}" category`);
         }
     })
 }
-
-let getPostsByMinDate= (minDateStr) => 
+module.exports.getPostsByMinDate = (minDateString) =>
 {
-    return new Promise ((resolve, reject) => {
-        selection = [];
-        if (!helpers.verifyArray(posts))    reject('No posts found')
-        else 
-        {
-            posts.forEach(post => 
-            {
-                if(helpers.dateStrComp(post.postDate, minDateStr))  selection.push(post);
+    return new Promise((resolve, reject) => 
+    {
+        try{
+            let posts = Post.findAll({
+                where: {
+                    postDate: {[Op.gte]: new Date(minDateString)}
+                }
             })
-            if (selection.length < 1) reject(`No posts found after ${minDateStr}`)
-            else resolve(selection);
+            if (posts.length < 1) reject(`No posts made on or after ${minDateString}`);
+            else resolve(posts);
+        }
+        catch {
+            reject(`There was a problem locating posts made on or after ${minDateString}`);
         }
     })
 }
-
-let getPostByID = (searchID) => 
+module.exports.getPostsByMinDate = (searchId) => 
 {
-    return new Promise((resolve, reject) =>{
-        let selection;
-
-        if (!helpers.verifyArray(posts))
-        {
-            reject('Nothing found')
+    return new Promise((resolve, reject) =>
+    {
+        try{
+            let post = Post.findAll({
+                where: {
+                    post_id: searchId
+                }
+            })
+            resolve(post);
         }
-        else {
+        catch{
+            reject(`Unable to find post with ID "${searchId}"`);
+        }
+    })
+}
+module.exports.getPublishedPosts = () =>
+{
+    return new Promise((resolve,reject) => {
+        try{
+            let posts = Post.findAll({
+                where: {
+                    published: true
+                }
+            })
+            resolve(posts);
+        }
+        catch{
+            reject('Unable to load published posts')
+        }
+    })
+}
+module.exports.getPublishedPostsByCategory = (searchCategory) => 
+{
+    return new Promise((resolve,reject) => {
+        try{
+            let published = [];
+            let posts = getPublishedPosts();
             posts.forEach(post => {
-                if (post.id == searchID) selection = post;
+                if(post.published)
+                {
+                    published.push(post);
+                }
             })
-            if (selection == undefined) reject(`No post found with ID "${searchID}"`);
-            else resolve(selection);
+            resolve(published);
+        }
+        catch{
+            reject(`Unable to retrieve published posts in category ${searchCategory}`);
         }
     })
 }
-
-let getPublishedPosts = () =>{
+module.exports.addPost = (postData) =>
+{
     return new Promise((resolve, reject) => {
-        
-        let published = [];
-        if (helpers.verifyArray(posts))
-        {
-            posts.forEach(post => {
-                if (post.published === true) published.push(post);
-            })
-            if (!published.length <=0)
+        try{
+            postData.published = (postData.published)? true : false;
+            for(property in postData)
             {
-                resolve(published);
-            } else 
-            {reject("No published posts found")}
-        } else 
-        {reject('No data found in posts')}
-    })
-}
-
-let getPublishedPostsByCat = async(cat) =>  {
-    let selection = [];
-    let published = await getPublishedPosts();
-    if (typeof(published) == "string") return published;
-
-    published.forEach(post => {
-        if (post.category === cat)    {
-            selection.push(post);
+                if (typeof(property) == "string" && property.length < 1)
+                {
+                    property = null;
+                }
+            }
+            Post.create({
+                title: postData.title,
+                body: postData.body,
+                postData: new Date(),
+                feature_img: postData.featureImage,
+                published: postData.published,
+                category: postData.category
+            })
+            
+            resolve(`"${postData.title}" saved`);    
+        }
+        catch{
+            reject(`Unable save "${postData.title}"`);
         }
     })
-    return selection;
 }
-
-let addPost = (postData) => {
-    console.log('Adding post...');
+module.exports.addCategory = (categoryData) =>
+{
+    return new Promise((resolve,reject) => {
+        try{
+            for(property in categoryData)
+            {
+                if (typeof(property) == "string" && property.length < 1)
+                {
+                    property = null;
+                }
+            }
+            Category.create({
+                category: categoryData.category
+            })
+            resolve(categoryData);
+        }
+        catch {
+            reject("Unable to add category");
+        }
+    })
+}
+module.exports.getCategories = () => 
+{
     return new Promise((resolve, reject) => {
-        if (postData.published == undefined) postData.published = false;
-        else postData.published = true;
-
-        //prepping date
-        pDate = new Date();
-        var dd = String(pDate.getDate()).padStart(2, '0');
-        var mm = String(pDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = pDate.getFullYear();
-
-        postData.postDate = `${yyyy}-${mm}-${dd}`;
-        postData.id = posts.length + 1;
-        posts.push(postData);
-
-        if (postData.id > posts.length) reject("Error! Post not added!");
-        else{
-            console.log(`Post ${postData.id} has been added to posts`)
-            resolve(posts);  
+        try {
+            let categories = Category.findAll();
+            resolve(categories);
+        }
+        catch {
+            reject('Unable to load categories');
         }
     })
 }
-
-exports.getPostByID = getPostByID;
-exports.getPostsByMinDate = getPostsByMinDate
-exports.getPostsByCategory = getPostsByCategory;
-exports.initialize = initialize;
-exports.getPosts = getPosts;
-exports.getPublishedPosts = getPublishedPosts;
-exports.getPublishedPostsByCat = getPublishedPostsByCat;
-exports.getCategories = getCategories;
-exports.addPost = addPost;

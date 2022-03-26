@@ -22,7 +22,7 @@ router.get('/', (req,res) => {
     {
         blogSvc.getPostsByCategory(req.query.category)
         .then((data) => {
-            res.render('posts', {post: data});
+            res.render('posts', {error: 'no posts found'});//{post: data});
         })
         .catch((message) => {
             res.render('posts', {error: message});
@@ -32,13 +32,13 @@ router.get('/', (req,res) => {
     {
         console.log(`minDate search received: ${req.query.minDate}`);
         blogSvc.getPostsByMinDate(req.query.minDate)
-        .then((data) => {res.render('posts', {post: data});})
+        .then((data) => {res.render('posts', {error: 'no posts found'});})//{post: data});})
         .catch((error) => {res.render('posts', {error: error});})
     }
     else {
         blogSvc.getPosts()
     .then((data) => {
-            res.render('posts', {post: data} );
+            res.render('posts', {message: 'no posts found'});
     })
     .catch((error) => {
         res.render('posts', {message: error});
@@ -76,19 +76,18 @@ router.post('/add', upload.single("featureImage"), (req, res) => {
     
         blogSvc.addPost(req.body)
         .then(blogSvc.getPosts()
-            .then((data)=> {
-                let address = (data.length) -1;
-                res.send(data[address]);
+            .then(()=> {
+                res.render('blog', {message: "No post found"});
             }))            
-        .catch(res.send)       
+        .catch(res.send);      
     })
 })
 //variable
 router.get('/:postID', (req, res) => {
     blogSvc.getPostByID(req.params.postID)
-    .then((data) => {
-        viewData = [data,]
-        res.render('posts', {post: viewData});
+    .then(() => {
+        //viewData = [data,]
+        res.render('posts', {message: 'no posts found'});//{post: viewData});
     })
     .catch((err)=> {
         res.render('posts', {message: err});

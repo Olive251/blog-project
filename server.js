@@ -6,7 +6,7 @@ No part * of this assignment has been copied manually or electronically from any
 * 
 * Name: Olivia Brown Student ID: 112582192 Date: March 11, 2022
 *
-* Online (Heroku) URL:
+* Online (Heroku) URL: https://web322-assignment5-obrown.herokuapp.com
 *
 * GitHub Repository URL: https://github.com/Olive251/web322-app/tree/assignment-5
 *           !!!(IN THE ASSIGNMENT-5 BRANCH)!!!
@@ -28,7 +28,7 @@ const publicRouter = require("./routes/public.js");
 //handlebars setup
 const hbs = handlebars.create({
     extname: '.hbs',
-    //custom helpers
+    //handlebars custom helpers
     helpers: {
         navLink: (url, options) => {
             return'<li' +
@@ -47,6 +47,13 @@ const hbs = handlebars.create({
         },
         safeHTML: (context) => {
             return stripJs(context);
+        },
+        formatDate: function(dateObj)
+        {
+            let year = datObj.getFullYear();
+            let month = (dateObj.getMonth() + 1).toString();
+            let day = dateObj.getDate().toString();
+            return`${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;
         }
     }
 })
@@ -56,6 +63,7 @@ app.engine('.hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', './views');
 app.use(express.static('public'));
+app.use(express.urlencoded({extended: true}));
 //added per assignment instructions
 app.use((req,res,next) => {
     let route = req.path.substring(1);
@@ -98,7 +106,7 @@ app.get('/', async(req,res) => {
     }
     catch(err){viewData.categoriesMessage = "no results";}
 
-    res.render("blog", {data: viewData});
+    res.render("blog", {message: "no results"});//{data: viewData});
 })
 
 app.use('/about', aboutRouter);

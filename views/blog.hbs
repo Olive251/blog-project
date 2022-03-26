@@ -1,6 +1,9 @@
 <div class="row">
     <section class="main col-md-9">
         <article>
+            {{#unless post}}
+                <h3>{{message}}</h3>
+            {{/unless}}
             <h2>{{data.post.title}}</h2>
             <img src="{{data.post.featureImage}}" alt="feature Image" style="width:100%" />
             <br /><br />

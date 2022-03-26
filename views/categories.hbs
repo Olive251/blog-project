@@ -1,12 +1,13 @@
 <div class="row">
     <div class="col-md-12">
+        <h2>Categories</h2>
+        <hr/>
+        <a href="/categories/add" class="btn btn-success pull-right">Add Category</a>
         {{#unless category}}
             <div class="col-md-12 text-center">
                 <strong>{{message}}</strong>
             </div>
         {{/unless}}
-        <h2>Categories</h2>
-        <hr/>
         {{#if category}}
             <div class = "table-responsive">
             <table class="table">

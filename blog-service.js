@@ -64,10 +64,10 @@ var Category = sequelize.define('category', {
 Post.belongsTo(Category, {foreignKey: 'category_id'});
 
 /*==========- Exports -==========*/
-module.exports.initialize = async() => {
+module.exports.initialize = () => {
     return new Promise((resolve, reject) => {
         try{
-            await sequelize.sync({});
+            sequelize.sync({});
             resolve('Database synced');
         }
         catch{
@@ -75,11 +75,11 @@ module.exports.initialize = async() => {
         }
     })
 };
-module.exports.getAllPosts = async() => {
+module.exports.getPosts = () => {
     return new Promise((resolve, reject) =>
     {
         try{
-            let posts = await Post.findAll()
+            let posts = Post.findAll()
             resolve(posts);
         }
         catch{
@@ -87,11 +87,11 @@ module.exports.getAllPosts = async() => {
         }
     })
 }
-module.exports.getPostsByCategory = async (searchCategory) => {
+module.exports.getPostsByCategory = (searchCategory) => {
     return new Promise((resolve, reject) =>
     {
         try{
-            let posts = await Post.findAll({
+            let posts = Post.findAll({
                 where: {
                     category: searchCategory
                 }
@@ -104,12 +104,12 @@ module.exports.getPostsByCategory = async (searchCategory) => {
         }
     })
 }
-module.exports.getPostsByMinDate = async(minDateString) =>
+module.exports.getPostsByMinDate = (minDateString) =>
 {
     return new Promise((resolve, reject) => 
     {
         try{
-            let posts = await Post.findAll({
+            let posts = Post.findAll({
                 where: {
                     postDate: {[Op.gte]: new Date(minDateString)}
                 }
@@ -122,12 +122,12 @@ module.exports.getPostsByMinDate = async(minDateString) =>
         }
     })
 }
-module.exports.getPostsByMinDate = async(searchId) => 
+module.exports.getPostsByMinDate = (searchId) => 
 {
     return new Promise((resolve, reject) =>
     {
         try{
-            let post = await Post.findAll({
+            let post = Post.findAll({
                 where: {
                     post_id: searchId
                 }
@@ -139,11 +139,11 @@ module.exports.getPostsByMinDate = async(searchId) =>
         }
     })
 }
-module.exports.getPublishedPosts = async() =>
+module.exports.getPublishedPosts = () =>
 {
     return new Promise((resolve,reject) => {
         try{
-            let posts = await Post.findAll({
+            let posts = Post.findAll({
                 where: {
                     published: true
                 }
@@ -155,7 +155,7 @@ module.exports.getPublishedPosts = async() =>
         }
     })
 }
-module.exports.getPublishedPostsByCategory = async(searchCategory) => 
+module.exports.getPublishedPostsByCategory = (searchCategory) => 
 {
     return new Promise((resolve,reject) => {
         try{
@@ -174,7 +174,7 @@ module.exports.getPublishedPostsByCategory = async(searchCategory) =>
         }
     })
 }
-module.exports.addPost = async(postData) =>
+module.exports.addPost = (postData) =>
 {
     return new Promise((resolve, reject) => {
         try{
@@ -194,7 +194,7 @@ module.exports.addPost = async(postData) =>
         }
     })
 }
-module.exports.getCategories = async() => 
+module.exports.getCategories = () => 
 {
     return new Promise((resolve, reject) => {
         try {

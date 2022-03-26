@@ -105,7 +105,7 @@ app.get('/', async(req,res) => {
     }
     catch(err){viewData.categoriesMessage = "no results";}
 
-    res.render("blog", {data: viewData});
+    res.render("blog", {message: "no results"});//{data: viewData});
 })
 
 app.use('/about', aboutRouter);

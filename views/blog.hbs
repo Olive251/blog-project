@@ -1,8 +1,11 @@
 <div class="row">
     <section class="main col-md-9">
         <article>
+            {{#unless post}}
+                <h3>{{message}}</h3>
+            {{/unless}}
             <h2>{{data.post.title}}</h2>
-            <img src="{{data.post.featureImage}}" alt="feature Image" style="width:100%" />
+            <img src="{{data.post.feature_img}}" alt="feature Image" style="width:100%" />
             <br /><br />
             {{#safeHTML data.post.body}}
             {{/safeHTML}}
@@ -11,7 +14,7 @@
             {{/if}}
             <br /><br />
             <strong>Category:</strong> {{data.post.category}}<br />
-            <strong>Last Updated:</strong> {{data.post.postDate}}
+            <strong>Last Updated:</strong> {{data.post.post_date}}
 
         </article>
     </section>

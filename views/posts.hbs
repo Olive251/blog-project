@@ -1,17 +1,18 @@
 
 <div class="row">
     <div class="col-md-12">
+        <h2>Posts</h2>
+        <hr/>
+        <a href="/posts/add" class="btn btn-success pull-right">Add Post</a>
         {{#unless post}}
             <div class="col-md-12 text-center">
                 <strong>{{message}}</strong>
             </div>
         {{/unless}}
-        <h2>Posts</h2>
-        <hr/>
         {{#if post}}
             <div class = "table-responsive">
             <table class="table">
-               <thead>
+              <thead>
                     <tr>
                         <th><strong>Post ID</strong></th>
                         <th><strong>Title</strong></th>
@@ -19,18 +20,19 @@
                         <th><strong>Category</strong></th>
                         <th><strong>Published</strong></th>
                     </tr>
-               </thead>
-               <tbody>
-               {{#each post}}
+              </thead>
+              <tbody>
+              {{#each post}}
                 <tr>
                     <td>{{this.id}}</td>
                     <td><a href="/blog/{{this.id}}">{{this.title}}</a></td>
-                    <td>{{this.postDate}}</td>
+                    <td>{{this.post_date}}</td>
                     <td><a href="/posts?category={{this.category}}">{{this.category}}</a></td>
                     <td>{{this.published}}</td>
+                    <td><a href="/posts/delete/{{this.id}}" class="btn btn-danger">Delete</a></td>
                 </tr>
-               {{/each}}
-               </tbody>
+              {{/each}}
+              </tbody>
             </table>
             </div>
         {{/if}}

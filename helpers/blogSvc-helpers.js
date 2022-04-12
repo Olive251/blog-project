@@ -7,9 +7,9 @@ let verifyArray = (array) =>
     return verification;
 }
 
-let dateStrComp = (postDate, searchDate) =>
+let dateStrComp = (post_date, searchDate) =>
 {
-    let pDate = new Date(postDate);
+    let pDate = new Date(post_date);
     let sDate = new Date(searchDate);
     return (pDate >= sDate);
 }

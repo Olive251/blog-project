@@ -13,7 +13,7 @@ router.get('/', async(req,res) => {
         if(req.query.ccategory) posts = await blogSvc.getPublishedPostsByCat(req.query.category);
         else posts = await blogSvc.getPublishedPosts();
         //sorting posts by date
-        posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate));
+        posts.sort((a,b) => new Date(b.post_date) - new Date(a.post_date));
         //get latest post
         let post = posts[0];
         //storing post(s) to be passed to the view
@@ -32,6 +32,7 @@ router.get('/', async(req,res) => {
 
     res.render("blog", {data: viewData});
 })
+
 router.get('/:id', async(req,res) =>  {
     let viewData = {};
 
@@ -41,7 +42,7 @@ router.get('/:id', async(req,res) =>  {
         if(req.query.category) posts = await blogSvc.getPublishedPostsByCat(req.query.cateogy);
         else posts = await blogSvc.getPublishedPosts();
 
-        posts.sort((a,b) => new Date(b.postDate) - new Date(a.postDate))
+        posts.sort((a,b) => new Date(b.post_date) - new Date(a.post_date))
         viewData.posts=posts;
     }
     catch(err){

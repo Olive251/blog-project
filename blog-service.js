@@ -1,17 +1,16 @@
 /*****************************************************************************
-* WEB322 – Assignment 05
+* WEB322 – Assignment 06
 * I declare that this assignment is my own work in accordance with Seneca Academic Policy. 
 No part * of this assignment has been copied manually or electronically from any other source 
 * (including 3rd party web sites) or distributed to other students.
 * 
 * Name: Olivia Brown Student ID: 112582192 Date: March 11, 2022
 *
-// mongodb+srv://dbUser:admin@senecaweb.v2jyk.mongodb.net/web322_week8?retryWrites=true&w=majority
-
-* Online (Heroku) URL: https://web322-assignment5-obrown.herokuapp.com
+* Online (Heroku) URL: https://assignment6-web322-obrown.herokuapp.com/
 *
-* GitHub Repository URL: https://github.com/Olive251/web322-app/tree/assignment-5
-*           !!!(IN THE ASSIGNMENT-5 BRANCH)!!!
+* GitHub Repository URL: https://github.com/Olive251/web322-app/tree/ms6
+*           !!!(IN THE MS-6 BRANCH)!!!
+*
 ******************************************************************************/
 const fs = require("fs");
 const helpers = require('./helpers/blogSvc-helpers.js');

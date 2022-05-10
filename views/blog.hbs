@@ -1,0 +1,39 @@
+<div class="row">
+    <section class="main col-md-9">
+        <article>
+            {{#unless post}}
+                <h3>{{message}}</h3>
+            {{/unless}}
+            <h2>{{data.post.title}}</h2>
+            <img src="{{data.post.feature_img}}" alt="feature Image" style="width:100%" />
+            <br /><br />
+            {{#safeHTML data.post.body}}
+            {{/safeHTML}}
+            {{#if data.message}}
+            <h4 class="error-msg">{{data.message}}</h4>
+            {{/if}}
+            <br /><br />
+            <strong>Category:</strong> {{data.post.category}}<br />
+            <strong>Last Updated:</strong> {{data.post.post_date}}
+
+        </article>
+    </section>
+    <aside class="col-md-3">
+        <br /><br />
+        <h4>Posts</h4>
+
+        <ul class="list-group">
+            {{#each data.posts}}
+            <a href="/blog/{{this.id}}" class="list-group-item">{{this.title}}</a>
+            {{/each}}
+        </ul>
+
+        <h4>Categories</h4>
+
+        <ul class="list-group">
+            {{#each data.categories}}
+            <a href="/posts?category={{this.id}}" class="list-group-item">{{this.category}}</a>
+            {{/each}}
+        </ul>
+    </aside>
+</div>

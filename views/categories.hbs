@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-md-12">
+        <h2>Categories</h2>
+        <hr/>
+        <a href="/categories/add" class="btn btn-success pull-right">Add Category</a>
+        {{#unless category}}
+            <div class="col-md-12 text-center">
+                <strong>{{message}}</strong>
+            </div>
+        {{/unless}}
+        {{#if category}}
+            <div class = "table-responsive">
+            <table class="table">
+              <thead>
+                    <tr>
+                        <th><strong>Category ID</strong></th>
+                        <th><strong>Category Name</strong></th>
+                    </tr>
+              </thead>
+              <tbody>
+              {{#each category}}
+                <tr>
+                    <td><a href="/posts?category={{this.id}}">{{this.id}}</a></td>
+                    <td><a href="/posts?category={{this.id}}">{{this.category}}</a></td>
+                    <td><a href="/categories/delete/{{this.id}}" class="btn btn-danger">Delete</a></td>
+                </tr>
+              {{/each}}
+              </tbody>
+            </table>
+            </div>
+        {{/if}}
+    </div>  
+</div>

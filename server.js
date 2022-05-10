@@ -1,15 +1,9 @@
-/*****************************************************************************
-* WEB322 – Assignment 06
-* I declare that this assignment is my own work in accordance with Seneca Academic Policy. 
-No part * of this assignment has been copied manually or electronically from any other source 
-* (including 3rd party web sites) or distributed to other students.
-* 
-* Name: Olivia Brown Student ID: 112582192 Date: March 11, 2022
+/***************************************************************************
+* Blog project
 *
 * Online (Heroku) URL: https://assignment6-web322-obrown.herokuapp.com/
 *
-* GitHub Repository URL: https://github.com/Olive251/web322-app/tree/ms6
-*           !!!(IN THE MS-6 BRANCH)!!!
+* GitHub Repository URL: https://github.com/Olive251/web322-app
 *
 ******************************************************************************/
 //INCLUDES

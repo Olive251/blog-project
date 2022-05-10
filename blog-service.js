@@ -1,17 +1,13 @@
 /*****************************************************************************
-* WEB322 – Assignment 06
-* I declare that this assignment is my own work in accordance with Seneca Academic Policy. 
-No part * of this assignment has been copied manually or electronically from any other source 
-* (including 3rd party web sites) or distributed to other students.
-* 
-* Name: Olivia Brown Student ID: 112582192 Date: March 11, 2022
 *
-* Online (Heroku) URL: https://assignment6-web322-obrown.herokuapp.com/
+* Blog Assignment
 *
-* GitHub Repository URL: https://github.com/Olive251/web322-app/tree/ms6
-*           !!!(IN THE MS-6 BRANCH)!!!
+* Online (Heroku) URL: https://agile-bastion-97856.herokuapp.com/
+*
+* GitHub Repository URL: https://github.com/Olive251/web322-app
 *
 ******************************************************************************/
+
 const fs = require("fs");
 const helpers = require('./helpers/blogSvc-helpers.js');
 const Sequelize = require('sequelize');
@@ -99,6 +95,7 @@ module.exports.getPostsByMinDate = (minDateString) =>
 
 module.exports.getPostByID = (id) => 
 {
+
   return new Promise((resolve, reject) => {
     Post.findAll({
         where: {
@@ -110,7 +107,6 @@ module.exports.getPostByID = (id) =>
         reject("no results returned");
     });
 });
-}
 
 module.exports.getPublishedPosts = () =>
 {
@@ -140,6 +136,7 @@ module.exports.getPublishedPostsByCategory = (category) =>
       .then((data) => resolve(data))
       })
       .catch(() => reject("unable to find any posts with that category"))
+
 }
 
 module.exports.addPost = (postData) =>
@@ -161,7 +158,6 @@ module.exports.addPost = (postData) =>
     });
 
 });
-}
 
 module.exports.getCategories = () => 
 {

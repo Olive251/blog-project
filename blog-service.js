@@ -1,12 +1,3 @@
-/*****************************************************************************
-*
-* Blog Assignment
-*
-* Online (Heroku) URL: https://agile-bastion-97856.herokuapp.com/
-*
-* GitHub Repository URL: https://github.com/Olive251/web322-app
-*
-******************************************************************************/
 
 const fs = require("fs");
 const helpers = require('./helpers/blogSvc-helpers.js');

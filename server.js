@@ -1,11 +1,5 @@
-/***************************************************************************
-* Blog project
-*
-* Online (Heroku) URL: https://assignment6-web322-obrown.herokuapp.com/
-*
-* GitHub Repository URL: https://github.com/Olive251/web322-app
-*
-******************************************************************************/
+//Online (Heroku) URL: https://assignment6-web322-obrown.herokuapp.com/
+
 //INCLUDES
 const express = require("express");
 const handlebars = require('express-handlebars');
